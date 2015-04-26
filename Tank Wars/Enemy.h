@@ -1,8 +1,6 @@
 #ifndef ENEMY_H
-
-
+#define ENEMY_H
 #include "Tank.h"
-//#include "Player.h"
 #include <cmath>
 
 
