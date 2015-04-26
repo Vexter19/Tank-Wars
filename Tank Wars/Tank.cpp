@@ -1,13 +1,15 @@
 #include "Tank.h"
 
-Tank::Tank(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel, int turrelCenterX,
-    double maxSpeed, double speedOfRotation, double speedTurrel) :
+Tank::Tank(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
+    int turrelCenterX, int diffTankTurrel, double maxSpeed,
+    double speedOfRotation, double speedTurrel) :
     GameObject(pos, tex, rect)
 {
     dirTurrel = 0;
     this->speedOfRotation = speedOfRotation;
     this->maxSpeed = convertSpeed(maxSpeed);
     this->speedTurrel = speedTurrel;
+    this->diffTankTurrel = diffTankTurrel;
 
     spriteTurrel.setTexture(tex);
     spriteTurrel.setTextureRect(rectTurrel);
@@ -27,7 +29,11 @@ void Tank::update(double time, short int direction, short int rotation)
 
     speed = 0;
 
-    sprite.setPosition(position.x, position.y);
+    // —читаем координаты центра башни.
+    double xTur = position.x - diffTankTurrel * cos(angle * PI / 180);
+    double yTur = position.y - diffTankTurrel * sin(angle * PI / 180);
+
+    sprite.setPosition(xTur, yTur);
     spriteTurrel.setPosition(position.x, position.y);
     sprite.setRotation(angle);
 }
@@ -68,4 +74,9 @@ void Tank::draw(RenderWindow &window)
 double Tank::getTurrelDir()
 {
     return dirTurrel;
+}
+
+IntRect Tank::getTurrelRect()
+{
+    return spriteTurrel.getTextureRect();
 }

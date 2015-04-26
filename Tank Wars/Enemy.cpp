@@ -1,9 +1,10 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel, int turrelCenterX,
-    double maxSpeed, double speedOfRotation, double speedTurrel, int health) :
-    Tank(pos, tex, rect, rectTurrel, turrelCenterX,
+Enemy::Enemy(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
+    int turrelCenterX, int diffTankTurrel, double maxSpeed,
+    double speedOfRotation, double speedTurrel, int health) :
+    Tank(pos, tex, rect, rectTurrel, turrelCenterX, diffTankTurrel,
     maxSpeed, speedOfRotation, speedTurrel)
 {
     this->health = 200;

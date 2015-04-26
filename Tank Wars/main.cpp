@@ -8,15 +8,15 @@
 #include "Collision.h"
 #include <iostream>
 
-#define WINDOW_WIDTH 1366
-#define WINDOW_HEIGHT 768
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
 
-#define USSR_T34 texPlayer, IntRect(0, 0, 153, 76), IntRect(0, 78, 174, 55), 52 , 36, 36, 100, 100
-#define GERMANY_TIGER2 texEnemy, IntRect(0, 0, 190, 100), IntRect(0, 100, 256, 71), 50 , 18, 18, 50, 100
+#define USSR_T34 texPlayer, IntRect(0, 0, 153, 76), IntRect(0, 78, 174, 55), 52, 13, 36, 36, 100, 100
+#define GERMANY_TIGER2 texEnemy, IntRect(0, 0, 190, 100), IntRect(0, 100, 256, 71), 50, 11, 18, 18, 50, 100
 
 int main()
 {
-    RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Wars" , Style::Fullscreen);
+    RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Wars");//, Style::Fullscreen);
 
     Clock clock;
 
@@ -70,9 +70,14 @@ int main()
 
             if (event.type == Event::MouseButtonPressed) {
                 if (event.key.code == Mouse::Left) {
-                    bullets.push_back(new Bullet(player.getPos(), player.getTurrelDir(), &texDynamicObjects, IntRect(0, 0, 17, 5)));
+                    Vector2f gunVertex;
+                    double barrel = player.getSprite().getTextureRect().width;
+                    gunVertex.x = player.getPos().x + barrel * cos(player.getTurrelDir() * PI / 180) ;
+                    gunVertex.y = player.getPos().y + barrel * sin(player.getTurrelDir() * PI / 180);
+                    bullets.push_back(new Bullet(gunVertex, player.getTurrelDir(), &texDynamicObjects, IntRect(0, 0, 17, 5)));
                 }
             }
+            std::cout << player.getTurrelDir() << std::endl;
         }
 
         direction = 0;
