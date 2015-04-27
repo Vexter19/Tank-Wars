@@ -12,7 +12,7 @@
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
-#define USSR_T34 texPlayer, IntRect(0, 0, 153, 76), IntRect(0, 78, 174, 55), 52, 13, 36, 36, 100, 100, 5
+#define USSR_T34 texPlayer, IntRect(0, 0, 153, 76), IntRect(0, 78, 174, 55), 52, 13, 36, 36, 100, 100, 4.6
 #define GERMANY_TIGER2 texEnemy, IntRect(0, 0, 190, 100), IntRect(0, 100, 256, 71), 50, 11, 18, 18, 50, 100, 10
 
 int main()
