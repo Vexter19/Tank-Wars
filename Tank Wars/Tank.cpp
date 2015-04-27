@@ -2,7 +2,7 @@
 
 Tank::Tank(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
     int turrelCenterX, int diffTankTurrel, double maxSpeed,
-    double speedOfRotation, double speedTurrel) :
+    double speedOfRotation, double speedTurrel, double rechargeTime) :
     GameObject(pos, tex, rect)
 {
     dirTurrel = 0;
@@ -10,6 +10,8 @@ Tank::Tank(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
     this->maxSpeed = convertSpeed(maxSpeed);
     this->speedTurrel = speedTurrel;
     this->diffTankTurrel = diffTankTurrel;
+    this->rechargeTime = rechargeTime;
+    remainingTime = rechargeTime;
 
     spriteTurrel.setTexture(tex);
     spriteTurrel.setTextureRect(rectTurrel);
@@ -28,6 +30,12 @@ void Tank::update(double time, short int direction, short int rotation)
     position.y += dy * time;
 
     speed = 0;
+
+    if (remainingTime != 0) {
+        remainingTime -= time / 1000;
+    } else {
+        remainingTime = 0;
+    }
 
     // —читаем координаты центра башни.
     double xTur = position.x - diffTankTurrel * cos(angle * PI / 180);
@@ -79,4 +87,16 @@ double Tank::getTurrelDir()
 IntRect Tank::getTurrelRect()
 {
     return spriteTurrel.getTextureRect();
+}
+
+void Tank::Fire(std::list<Bullet*> bullets, Texture &texBullet)
+{
+    if (remainingTime == 0) {
+        Vector2f gunVertex;
+        double barrel = sprite.getTextureRect().width;
+        gunVertex.x = position.x + barrel * cos(dirTurrel * PI / 180);
+        gunVertex.y = position.y + barrel * sin(dirTurrel * PI / 180);
+        bullets.push_back(new Bullet(gunVertex, dirTurrel, &texBullet, IntRect(0, 0, 17, 5)));
+        remainingTime = rechargeTime;
+    }
 }

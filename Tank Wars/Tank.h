@@ -1,6 +1,7 @@
 #ifndef TANK_H
 #define TANK_H
 #include "GameObject.h"
+#
 
 
 using namespace sf;
@@ -16,6 +17,8 @@ protected:
     double speedOfRotation;
     double maxSpeed;
     double diffTankTurrel; // –ассто€ние между центром танка и башни.
+    double rechargeTime;
+    double remainingTime; // ќставшеес€ врем€ до конца перезар€дки танка.
     //Turrel
     double dirTurrel;
     double speedTurrel;
@@ -24,9 +27,10 @@ public:
     //Tank
     Tank(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
         int turrelCenterX, int diffTankTurrel, double maxSpeed,
-        double speedOfRotation, double speedTurrel);
+        double speedOfRotation, double speedTurrel, double rechargeTime);
     void update(double time, short int direction, short int rotation);
     void draw(RenderWindow &window);
+    void Fire(std::list<Bullet*> bullets, Texture &texBullet);
 
     //Turrel 
     void rotateTurrel(Vector2i mousePos);

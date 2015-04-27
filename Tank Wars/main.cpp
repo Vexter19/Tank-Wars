@@ -6,17 +6,19 @@
 #include "View.h"
 #include "Bullet.h"
 #include "Collision.h"
+#include "Crosshair.h"
 #include <iostream>
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
-#define USSR_T34 texPlayer, IntRect(0, 0, 153, 76), IntRect(0, 78, 174, 55), 52, 13, 36, 36, 100, 100
-#define GERMANY_TIGER2 texEnemy, IntRect(0, 0, 190, 100), IntRect(0, 100, 256, 71), 50, 11, 18, 18, 50, 100
+#define USSR_T34 texPlayer, IntRect(0, 0, 153, 76), IntRect(0, 78, 174, 55), 52, 13, 36, 36, 100, 100, 5
+#define GERMANY_TIGER2 texEnemy, IntRect(0, 0, 190, 100), IntRect(0, 100, 256, 71), 50, 11, 18, 18, 50, 100, 10
 
 int main()
 {
     RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Wars");//, Style::Fullscreen);
+    window.setMouseCursorVisible(false);
 
     Clock clock;
 
@@ -28,6 +30,8 @@ int main()
     texDynamicObjects.loadFromFile("images/DynamicObjects.png");
     Texture texMap;
     texMap.loadFromFile("images/grass.png");
+    Texture texGUI;
+    texGUI.loadFromFile("images/GUI.png");
 
     std::list<Enemy*> enemies;
     std::list<Enemy*>::iterator it_enemies;
@@ -44,6 +48,8 @@ int main()
     Map grass(texMap);
 
     Player player(Vector2f(500, 500), USSR_T34);
+
+    Crosshair crosshair(Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), texGUI, IntRect(0, 0, 24, 24));
 
     enemies.push_back(new Enemy(Vector2f(1000, 1000), GERMANY_TIGER2));
 
@@ -70,11 +76,12 @@ int main()
 
             if (event.type == Event::MouseButtonPressed) {
                 if (event.key.code == Mouse::Left) {
-                    Vector2f gunVertex;
+                    /*Vector2f gunVertex;
                     double barrel = player.getSprite().getTextureRect().width;
                     gunVertex.x = player.getPos().x + barrel * cos(player.getTurrelDir() * PI / 180) ;
                     gunVertex.y = player.getPos().y + barrel * sin(player.getTurrelDir() * PI / 180);
-                    bullets.push_back(new Bullet(gunVertex, player.getTurrelDir(), &texDynamicObjects, IntRect(0, 0, 17, 5)));
+                    bullets.push_back(new Bullet(gunVertex, player.getTurrelDir(), &texDynamicObjects, IntRect(0, 0, 17, 5)));*/
+                    player.Fire(bullets, texDynamicObjects);
                 }
             }
             std::cout << player.getTurrelDir() << std::endl;
@@ -151,6 +158,9 @@ int main()
             (*it_anims)->update(time);
             (*it_anims)->draw(window);
         }
+
+        crosshair.update((Vector2f)mousePos, enemies, player);
+        crosshair.draw(window);
         
         window.display();
     }
