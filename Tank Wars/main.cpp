@@ -84,7 +84,6 @@ int main()
                     player.Fire(bullets, texDynamicObjects);
                 }
             }
-            std::cout << player.getTurrelDir() << std::endl;
         }
 
         direction = 0;
@@ -105,6 +104,7 @@ int main()
 
         double time = (double)clock.getElapsedTime().asMicroseconds();
         time = time / 1000;
+        //std::cout << time << std::endl;
         clock.restart();
 
         getViewCoords(player.getPos().x, player.getPos().y);
@@ -135,7 +135,7 @@ int main()
         Vector2i mousePos = getMouseCoords(Mouse::getPosition(window), windowSize);
         
 
-        player.update(time, direction, rotation, enemies);
+        player.update(time, direction, rotation, enemies, bullets, anims);
         player.rotateTurrel(mousePos);
         
         window.setView(view);
@@ -145,12 +145,12 @@ int main()
         player.draw(window);
         for (it_enemies = enemies.begin(); it_enemies != enemies.end(); it_enemies++) {
             Tank playerTank = player;
-            (*it_enemies)->update(time, playerTank);
+            (*it_enemies)->update(time, playerTank, bullets, anims);
             (*it_enemies)->draw(window);
         }
         
         for (it_bullets = bullets.begin(); it_bullets != bullets.end(); it_bullets++) {
-            (*it_bullets)->update(time, view, window, player, enemies, anims);
+            (*it_bullets)->update(time, view, window);
             (*it_bullets)->draw(window);
         }
 

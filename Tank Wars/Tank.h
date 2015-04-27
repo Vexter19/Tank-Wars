@@ -1,8 +1,7 @@
 #ifndef TANK_H
 #define TANK_H
 #include "GameObject.h"
-#
-
+#include "Bullet.h"
 
 using namespace sf;
 
@@ -28,9 +27,12 @@ public:
     Tank(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
         int turrelCenterX, int diffTankTurrel, double maxSpeed,
         double speedOfRotation, double speedTurrel, double rechargeTime);
-    void update(double time, short int direction, short int rotation);
+
+    void update(double time, short int direction, short int rotation,
+        std::list<Bullet*> &bullets, std::list<Animation*> &anims);
+
     void draw(RenderWindow &window);
-    void Fire(std::list<Bullet*> bullets, Texture &texBullet);
+    void Fire(std::list<Bullet*> &bullets, Texture &texBullet);
 
     //Turrel 
     void rotateTurrel(Vector2i mousePos);

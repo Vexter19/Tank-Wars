@@ -18,7 +18,8 @@ Tank::Tank(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
     spriteTurrel.setOrigin(turrelCenterX, rectTurrel.height / 2);
 }
 
-void Tank::update(double time, short int direction, short int rotation)
+void Tank::update(double time, short int direction, short int rotation,
+    std::list<Bullet*> &bullets, std::list<Animation*> &anims)
 {
     angle += speedOfRotation * rotation * time / 1000;
     speed = (direction > 0) ? (maxSpeed * direction) : (maxSpeed * direction / 2);
@@ -31,7 +32,7 @@ void Tank::update(double time, short int direction, short int rotation)
 
     speed = 0;
 
-    if (remainingTime != 0) {
+    if (remainingTime > 0) {
         remainingTime -= time / 1000;
     } else {
         remainingTime = 0;
@@ -44,6 +45,14 @@ void Tank::update(double time, short int direction, short int rotation)
     sprite.setPosition(xTur, yTur);
     spriteTurrel.setPosition(position.x, position.y);
     sprite.setRotation(angle);
+
+    for (std::list<Bullet*>::iterator it = bullets.begin(); it != bullets.end(); ++it) {
+        GameObject *obj_bullet = *it;
+        if (checkCollision(obj_bullet) == true) {
+            (*it)->Destroy(anims);
+            
+        }
+    }
 }
 
 void Tank::rotateTurrel(Vector2i mouseVector)
@@ -89,7 +98,7 @@ IntRect Tank::getTurrelRect()
     return spriteTurrel.getTextureRect();
 }
 
-void Tank::Fire(std::list<Bullet*> bullets, Texture &texBullet)
+void Tank::Fire(std::list<Bullet*> &bullets, Texture &texBullet)
 {
     if (remainingTime == 0) {
         Vector2f gunVertex;

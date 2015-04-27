@@ -13,8 +13,7 @@ GameObject(pos, *tex, rect)
     life = true;
 }
 
-void Bullet::update(double time, View &view, RenderWindow &window,
-    Player &player, std::list<Enemy*> &enemies, std::list<Animation*> &anims)
+void Bullet::update(double time, View &view, RenderWindow &window)
 {
     position.x += dx * time;
     position.y += dy * time;
@@ -27,22 +26,17 @@ void Bullet::update(double time, View &view, RenderWindow &window,
         life = false;
     }
 
-    /*GameObject *objPlayer = &player;
-    if (checkCollision(objPlayer)) {
-        life = false;
-    }*/
-
-    for (std::list<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
-        GameObject *obj_enemy = *it;
-        if (checkCollision(obj_enemy) == true) {
-            life = false;
-            anims.push_back(new Animation(*texture, 13, false, IntRect(0, 10, 40, 40), Vector2f(position.x, position.y)));
-        }
-    }
     sprite.setPosition(position.x, position.y);
 }
 
 bool Bullet::isAlive()
 {
     return life;
+}
+
+void Bullet::Destroy(std::list<Animation*> &anims)
+{
+    life = false;
+    anims.push_back(new Animation(*texture, 13, false, IntRect(0, 10, 40, 40),
+        Vector2f(position.x, position.y)));
 }

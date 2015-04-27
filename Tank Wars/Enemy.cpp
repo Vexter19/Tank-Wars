@@ -10,9 +10,10 @@ Enemy::Enemy(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
     this->health = 200;
 }
 
-void Enemy::update(double time, Tank &player)
+void Enemy::update(double time, Tank &player,
+    std::list<Bullet*> &bullets, std::list<Animation*> &anims)
 {
-    Tank::update(time, 0, 0);
+    Tank::update(time, 0, 0, bullets, anims);
     if (sqrt(sqr(player.getPos().x - position.x) +
         sqr(player.getPos().y - position.y)) < 700) {
         rotateTurrel((Vector2i)player.getPos());
