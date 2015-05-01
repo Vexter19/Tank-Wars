@@ -20,10 +20,10 @@ void Bullet::update(double time, View &view, RenderWindow &window,
     position.x += dx * time;
     position.y += dy * time;
 
-    if ((position.x > (view.getCenter().x + (window.getSize().x / 2))) ||
-        (position.y > (view.getCenter().y + (window.getSize().y / 2))) ||
-        (position.x < (view.getCenter().x - (window.getSize().x / 2))) ||
-        (position.y < (view.getCenter().y - (window.getSize().y / 2)))) {
+    if (((position.x > (view.getCenter().x + window.getSize().x)) ||
+        (position.y > (view.getCenter().y + window.getSize().y))) ||
+        (position.x < (view.getCenter().x - window.getSize().x)) ||
+        (position.y < (view.getCenter().y - window.getSize().y))) {
         dx = 0;
         life = false;
     }

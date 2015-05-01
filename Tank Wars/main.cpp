@@ -15,7 +15,7 @@
 
 int main()
 {
-    RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Wars");// , Style::Fullscreen);
+    RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Wars", Style::Fullscreen);
     window.setMouseCursorVisible(false);
 
     Event event;
@@ -26,16 +26,16 @@ int main()
         Sprite menu;
 
         while (window.pollEvent(event)) {
-            if ((event.type == Event::Closed) ||
-                (Keyboard::isKeyPressed(Keyboard::Escape))) {
-                window.close();
-            }
+        if ((event.type == Event::Closed) ||
+        (Keyboard::isKeyPressed(Keyboard::Escape))) {
+        window.close();
+        }
         }
         menu.setTexture(texMenu);
         menu.setPosition(0, 0);
         window.draw(menu);
         window.display();
-    }*/
+        }*/
 
     Clock clock;
 
@@ -89,12 +89,12 @@ int main()
     rectTest.top = 100;
     rectTest.width = 100;
 
-    while (window.isOpen()) { 
+    while (window.isOpen()) {
         while (window.pollEvent(event)) {
             if ((event.type == Event::Closed) ||
                 (Keyboard::isKeyPressed(Keyboard::Escape))) {
                 window.close();
-            } 
+            }
         }
 
         direction = 0;
@@ -114,15 +114,11 @@ int main()
         }
         if (event.type == Event::MouseButtonPressed &&
             event.key.code == Mouse::Left) {
-                player.fire(bullets, texDynamicObjects);
+            player.fire(bullets, texDynamicObjects);
         }
 
-        if (event.type == Event::MouseButtonPressed &&
-            event.key.code == Mouse::Left) {
-            
-        }
-
-        if (event.type == Event::MouseWheelMoved) {
+        // Зум. Работает косячно.
+        /*if (event.type == Event::MouseWheelMoved) {
             Vector2f backupView = view.getSize();
             std::cout << backupView.x << "  " << backupView.y << std::endl;
             FloatRect newView;
@@ -144,7 +140,7 @@ int main()
                 }
             }
             event.mouseWheel.delta = 0;
-        }
+        }*/
             
 
         double time = (double)clock.getElapsedTime().asMicroseconds();
@@ -177,9 +173,8 @@ int main()
         }
 
         windowSize = window.getSize();
+        //Vector2i mousePos = getMouseCoords(Mouse::getPosition(window), (Vector2u)view.getSize());
         Vector2i mousePos = getMouseCoords(Mouse::getPosition(window), windowSize);
-        
-
         player.update(time, direction, rotation, objects, enemies, bullets, anims);
         player.rotateTurrel(mousePos);
         
