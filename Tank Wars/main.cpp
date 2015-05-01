@@ -8,17 +8,34 @@
 #include "Collision.h"
 #include "Crosshair.h"
 #include <iostream>
-
-#define WINDOW_WIDTH 1366
-#define WINDOW_HEIGHT 768
+#include <SFML/Window/Event.hpp>
 
 #define USSR_T34 texPlayer, IntRect(0, 0, 153, 76), IntRect(0, 78, 174, 55), 52, 13, 36, 36, 100, 100, 4.6, 50, "T-34"
 #define GERMANY_TIGER2 texEnemy, IntRect(0, 0, 190, 100), IntRect(0, 100, 256, 71), 50, 11, 18, 18, 50, 100, 10, 35, "Tiger II"
 
 int main()
 {
-    RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Wars", Style::Fullscreen);
+    RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Wars");// , Style::Fullscreen);
     window.setMouseCursorVisible(false);
+
+    Event event;
+
+    /*while (true) {
+        Texture texMenu;
+        texMenu.loadFromFile("images/grass.png");
+        Sprite menu;
+
+        while (window.pollEvent(event)) {
+            if ((event.type == Event::Closed) ||
+                (Keyboard::isKeyPressed(Keyboard::Escape))) {
+                window.close();
+            }
+        }
+        menu.setTexture(texMenu);
+        menu.setPosition(0, 0);
+        window.draw(menu);
+        window.display();
+    }*/
 
     Clock clock;
 
@@ -58,8 +75,6 @@ int main()
     Vector2u windowSize;
     view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 
-    Event event;
-
     /* direction - задаёт направление движения танка игрока:
     Принимает значение 1, если нажата кнопка W
     и -1, если нажата S */
@@ -79,13 +94,7 @@ int main()
             if ((event.type == Event::Closed) ||
                 (Keyboard::isKeyPressed(Keyboard::Escape))) {
                 window.close();
-            }
-
-            if (event.type == Event::MouseButtonPressed) {
-                if (event.key.code == Mouse::Left) {
-                    player.fire(bullets, texDynamicObjects);
-                }
-            }
+            } 
         }
 
         direction = 0;
@@ -103,6 +112,40 @@ int main()
         if (Keyboard::isKeyPressed(Keyboard::S)) {
             direction = -1;
         }
+        if (event.type == Event::MouseButtonPressed &&
+            event.key.code == Mouse::Left) {
+                player.fire(bullets, texDynamicObjects);
+        }
+
+        if (event.type == Event::MouseButtonPressed &&
+            event.key.code == Mouse::Left) {
+            
+        }
+
+        if (event.type == Event::MouseWheelMoved) {
+            Vector2f backupView = view.getSize();
+            std::cout << backupView.x << "  " << backupView.y << std::endl;
+            FloatRect newView;
+            newView.left = 0;
+            newView.top = 0;
+
+            if (event.mouseWheel.delta < 0) {
+                if (backupView.x < 1920 && backupView.y < 1080) {
+                    newView.width = backupView.x * 1.1;
+                    newView.height = backupView.y * 1.1;
+                    view.reset(newView);
+                }
+            }
+            if (event.mouseWheel.delta > 0) {
+                if (backupView.x > 960 && backupView.y > 540) {
+                    newView.width = backupView.x / 1.1;
+                    newView.height = backupView.y / 1.1;
+                    view.reset(newView);
+                }
+            }
+            event.mouseWheel.delta = 0;
+        }
+            
 
         double time = (double)clock.getElapsedTime().asMicroseconds();
         time = time / 1000;

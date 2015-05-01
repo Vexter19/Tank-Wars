@@ -1,27 +1,33 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+#define WINDOW_WIDTH 1366
+#define WINDOW_HEIGHT 768
+
 sf::View view;
 
-View getViewCoords(float x, float y)
+const double mapWidth = 2732;
+const double mapHeight = 1536;
+
+View getViewCoords(double x, double y)
 {
-    float tempX = x;
-    float tempY = y;
+    double tempX = x;
+    double tempY = y;
 
-    if (x < 683) {
-        tempX = 683;
+    if (x < view.getSize().x / 2) {
+        tempX = view.getSize().x / 2;
     }
 
-    if (x > 2049) {
-        tempX = 2049;
+    if (x > (mapWidth - view.getSize().x * 0.5)) {
+        tempX = mapWidth - view.getSize().x * 0.5;
     }
 
-    if (y < 384) {
-        tempY = 384;
+    if (y < view.getSize().y / 2) {
+        tempY = view.getSize().y / 2;
     }
 
-    if (y > 1152) {
-        tempY = 1152;
+    if (y >(mapHeight - view.getSize().y * 0.5)) {
+        tempY = mapHeight - view.getSize().y * 0.5;
     }
 
     view.setCenter(tempX, tempY);
