@@ -1,13 +1,23 @@
 #include "Map.h"
 
 
-Map::Map(Texture &tex)
+Map::Map(Texture &background, Texture &texObjects,
+    std::list<GameObject*> &objects, int lvl)
 {
-    sprite.setTexture(tex);
-    sprite.setPosition(0, 0);
+    this->background.setTexture(background);
+    this->background.setPosition(0, 0);
+    switch (lvl) {
+    case 0: objects.push_back(new GameObject(Vector2f(600, 600), texObjects, IntRect(0, 0, 128, 120)));
+        objects.push_back(new GameObject(Vector2f(1000, 1500), texObjects, IntRect(0, 0, 128, 120)));
+    }
 }
 
-void Map::draw(RenderWindow &window)
+void Map::draw(RenderWindow &window, std::list<GameObject*> &objects)
 {
-    window.draw(sprite);
+    window.draw(background);
+    for (std::list<GameObject*>::iterator it = objects.begin();
+        it != objects.end(); ++it) {
+        //GameObject *obj_bullet = *it;
+        (*it)->draw(window);
+    }
 }

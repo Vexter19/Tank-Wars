@@ -4,6 +4,7 @@
 #include "Collision.h"
 #include <list>
 #include <cmath>
+#include <sstream>
 
 
 using namespace sf;
@@ -11,6 +12,7 @@ using namespace sf;
 double convertMeters(double meters);
 double convertSpeed(double speed);
 double sqr(double x);
+std::string numToStr(double number);
 
 class GameObject
 {

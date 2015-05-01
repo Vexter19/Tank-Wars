@@ -9,15 +9,15 @@
 #include "Crosshair.h"
 #include <iostream>
 
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH 1366
+#define WINDOW_HEIGHT 768
 
-#define USSR_T34 texPlayer, IntRect(0, 0, 153, 76), IntRect(0, 78, 174, 55), 52, 13, 36, 36, 100, 100, 4.6
-#define GERMANY_TIGER2 texEnemy, IntRect(0, 0, 190, 100), IntRect(0, 100, 256, 71), 50, 11, 18, 18, 50, 100, 10
+#define USSR_T34 texPlayer, IntRect(0, 0, 153, 76), IntRect(0, 78, 174, 55), 52, 13, 36, 36, 100, 100, 4.6, 50, "T-34"
+#define GERMANY_TIGER2 texEnemy, IntRect(0, 0, 190, 100), IntRect(0, 100, 256, 71), 50, 11, 18, 18, 50, 100, 10, 35, "Tiger II"
 
 int main()
 {
-    RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Wars");//, Style::Fullscreen);
+    RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Wars", Style::Fullscreen);
     window.setMouseCursorVisible(false);
 
     Clock clock;
@@ -30,6 +30,8 @@ int main()
     texDynamicObjects.loadFromFile("images/DynamicObjects.png");
     Texture texMap;
     texMap.loadFromFile("images/grass.png");
+    Texture texMapObjects;
+    texMapObjects.loadFromFile("images/MapObjects.png");
     Texture texGUI;
     texGUI.loadFromFile("images/GUI.png");
 
@@ -39,19 +41,19 @@ int main()
     std::list<Bullet*> bullets;
     std::list<Bullet*>::iterator it_bullets;
 
-    std::list<GameObject*> staticObjects;
+    std::list<GameObject*> objects;
     std::list<GameObject*>::iterator it_static_objects;
 
     std::list<Animation*> anims;
     std::list<Animation*>::iterator it_anims;
 
-    Map grass(texMap);
+    Map map(texMap, texMapObjects, objects, 0);
 
     Player player(Vector2f(500, 500), USSR_T34);
 
     Crosshair crosshair(Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), texGUI, IntRect(0, 0, 24, 24));
 
-    enemies.push_back(new Enemy(Vector2f(1000, 1000), GERMANY_TIGER2));
+    enemies.push_back(new Enemy(Vector2f(1000, 1000), &texDynamicObjects, GERMANY_TIGER2));
 
     Vector2u windowSize;
     view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -67,6 +69,11 @@ int main()
     и -1, если нажата A */
     short int rotation = 0;
 
+    IntRect rectTest;
+    rectTest.left = 100;
+    rectTest.top = 100;
+    rectTest.width = 100;
+
     while (window.isOpen()) { 
         while (window.pollEvent(event)) {
             if ((event.type == Event::Closed) ||
@@ -76,12 +83,7 @@ int main()
 
             if (event.type == Event::MouseButtonPressed) {
                 if (event.key.code == Mouse::Left) {
-                    /*Vector2f gunVertex;
-                    double barrel = player.getSprite().getTextureRect().width;
-                    gunVertex.x = player.getPos().x + barrel * cos(player.getTurrelDir() * PI / 180) ;
-                    gunVertex.y = player.getPos().y + barrel * sin(player.getTurrelDir() * PI / 180);
-                    bullets.push_back(new Bullet(gunVertex, player.getTurrelDir(), &texDynamicObjects, IntRect(0, 0, 17, 5)));*/
-                    player.Fire(bullets, texDynamicObjects);
+                    player.fire(bullets, texDynamicObjects);
                 }
             }
         }
@@ -135,22 +137,22 @@ int main()
         Vector2i mousePos = getMouseCoords(Mouse::getPosition(window), windowSize);
         
 
-        player.update(time, direction, rotation, enemies, bullets, anims);
+        player.update(time, direction, rotation, objects, enemies, bullets, anims);
         player.rotateTurrel(mousePos);
         
         window.setView(view);
         window.clear();
  
-        grass.draw(window);
+        map.draw(window, objects);
         player.draw(window);
         for (it_enemies = enemies.begin(); it_enemies != enemies.end(); it_enemies++) {
             Tank playerTank = player;
-            (*it_enemies)->update(time, playerTank, bullets, anims);
+            (*it_enemies)->update(time, playerTank, bullets, objects, anims);
             (*it_enemies)->draw(window);
         }
         
         for (it_bullets = bullets.begin(); it_bullets != bullets.end(); it_bullets++) {
-            (*it_bullets)->update(time, view, window);
+            (*it_bullets)->update(time, view, window, objects, anims);
             (*it_bullets)->draw(window);
         }
 

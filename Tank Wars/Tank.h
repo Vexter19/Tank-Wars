@@ -18,6 +18,10 @@ protected:
     double diffTankTurrel; // –ассто€ние между центром танка и башни.
     double rechargeTime;
     double remainingTime; // ќставшеес€ врем€ до конца перезар€дки танка.
+    int health;
+    int damage;
+    std::string name;
+    bool life;
     //Turrel
     double dirTurrel;
     double speedTurrel;
@@ -26,13 +30,22 @@ public:
     //Tank
     Tank(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
         int turrelCenterX, int diffTankTurrel, double maxSpeed,
-        double speedOfRotation, double speedTurrel, double rechargeTime);
+        double speedOfRotation, double speedTurrel,
+        double rechargeTime, int damage, std::string name, int health);
 
     void update(double time, short int direction, short int rotation,
-        std::list<Bullet*> &bullets, std::list<Animation*> &anims);
+        std::list<GameObject*> &objects, std::list<Bullet*> &bullets,
+        std::list<Animation*> &anims);
 
     void draw(RenderWindow &window);
-    void Fire(std::list<Bullet*> &bullets, Texture &texBullet);
+    void fire(std::list<Bullet*> &bullets, Texture &texBullet);
+    void getDamage(int damage);
+
+    std::string getTankInfo();
+    int getDamageOfBullet();
+
+    void setLife();
+    bool isAlive();
 
     //Turrel 
     void rotateTurrel(Vector2i mousePos);

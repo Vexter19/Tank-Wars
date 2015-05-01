@@ -1,7 +1,6 @@
 #include "GameObject.h"
 
 
-
 GameObject::GameObject(Vector2f pos, Texture &tex, IntRect rect)
 {
     position.x = pos.x;
@@ -9,6 +8,7 @@ GameObject::GameObject(Vector2f pos, Texture &tex, IntRect rect)
     sprite.setTexture(tex);
     sprite.setTextureRect(rect);
     sprite.setOrigin(Vector2f((float)rect.width / 2, (float)rect.height / 2));
+    sprite.setPosition(position);
     speed = 0;
     angle = 0;
 }
@@ -40,10 +40,10 @@ Sprite GameObject::getSprite()
 
 bool GameObject::checkCollision(GameObject *obj)
 {
-    if (this->sprite.getGlobalBounds().intersects(obj->getSprite().getGlobalBounds())) {
-        if (Collision::BoundingBoxTest(sprite, obj->getSprite())) {
-            return true;
-        }
+    //if (this->sprite.getGlobalBounds().intersects(obj->getSprite().getGlobalBounds())) {
+    
+    if (Collision::BoundingBoxTest(sprite, obj->getSprite())) {
+        return true;
     } else {
         return false;
     }
@@ -64,4 +64,16 @@ double convertSpeed(double speed)
 double sqr(double x)
 {
     return x*x;
+}
+
+std::string numToStr(double number)
+{
+    // Округляем число до сотых.
+    number *= 100;
+    int int_number = (int)number;
+    number = double(int_number) / 100;
+
+    std::ostringstream buff;
+    buff << number;
+    return buff.str();
 }
