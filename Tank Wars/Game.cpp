@@ -2,7 +2,8 @@
 
 
 Game::Game(void)
-{    
+{
+    isInitialized = false;
 }
 
 int Game::Run(sf::RenderWindow &window)
@@ -63,7 +64,7 @@ int Game::Run(sf::RenderWindow &window)
         while (window.pollEvent(event)) {
             if ((event.type == Event::Closed) ||
                 (Keyboard::isKeyPressed(Keyboard::Escape))) {
-                return -1;
+                return 2;
             }
         }
 
@@ -115,13 +116,12 @@ int Game::Run(sf::RenderWindow &window)
 
         double time = (double)clock.getElapsedTime().asMicroseconds();
         time = time / 1000;
-        //std::cout << time << std::endl;
         clock.restart();
 
         getViewCoords(player.getPos().x, player.getPos().y);
 
         for (it_bullets = bullets.begin(); it_bullets != bullets.end();) {
-            Bullet *b = *it_bullets;
+            Bullet* b = *it_bullets;
 
             if (b->isAlive() == false) {
                 it_bullets = bullets.erase(it_bullets);

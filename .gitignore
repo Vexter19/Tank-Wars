@@ -154,3 +154,9 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+/Tank Wars/MouseCursor.cpp
+/Tank Wars/Menu.cpp
+/Tank Wars/Menu.h
+/Tank Wars/Screens.h
+/Tank Wars/Game.h
+/Tank Wars/cScreen.h

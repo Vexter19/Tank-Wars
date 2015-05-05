@@ -2,6 +2,12 @@
 #define TANK_H
 #include "GameObject.h"
 #include "Bullet.h"
+#include "View.h"
+
+#define SPEED_OF_RETURNING 0.1
+
+extern const double mapWidth;
+extern const double mapHeight;
 
 using namespace sf;
 
@@ -22,6 +28,9 @@ protected:
     int damage;
     std::string name;
     bool life;
+
+    void backToPrevPos(int direction, int rotation, Vector2f backupPos);
+
     //Turrel
     double dirTurrel;
     double speedTurrel;

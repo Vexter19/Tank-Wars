@@ -21,3 +21,11 @@ void Map::draw(RenderWindow &window, std::list<GameObject*> &objects)
         (*it)->draw(window);
     }
 }
+
+Vector2f Map::getSize()
+{
+    Vector2f result;
+    result.x = background.getLocalBounds().width;
+    result.y = background.getLocalBounds().height;
+    return result;
+}

@@ -69,9 +69,19 @@ void Tank::update(double time, short int direction, short int rotation,
             it != objects.end(); ++it) {
             GameObject *obj = *it;
             if (checkCollision(obj) == true) {
-                position.x = backupPos.x - 0.1 * cos(angle * PI / 180);
-                position.y = backupPos.y - 0.1 * sin(angle * PI / 180);
+                backToPrevPos(direction, rotation, backupPos);
+                if (rotation == 1) {
+                    angle -= 1;
+                } else if (rotation == -1) {
+                    angle += 1;
+                }
             }
+        }
+
+        // Обрабатываем выход за границы карты
+        if (position.x >= mapWidth || position.x < 0 ||
+            position.y >= mapHeight || position.y < 0) {
+            backToPrevPos(direction, rotation, backupPos);
         }
 
         sprite.setPosition(position.x, position.y);
@@ -94,15 +104,13 @@ void Tank::rotateTurrel(Vector2i mouseVector)
         dirMouse -= 360;
     }
 
-    //std::cout << dirMouse << " " << dirTurrel << std::endl;
-
     double dirDiff = dirMouse - dirTurrel;
 
-    if ((dirTurrel <= 360 && dirTurrel >= 270)
+    /*if ((dirTurrel <= 360 && dirTurrel >= 180)
         && (dirMouse >= 0 && dirMouse <= 90)) {
         dirDiff = -dirDiff;
-    }
-    
+    }*/
+
     int sign;  
     if (dirDiff > 1) {
         sign = 1;
@@ -112,20 +120,19 @@ void Tank::rotateTurrel(Vector2i mouseVector)
         sign = 0;
     }
 
-    if ((dirTurrel <= 361) && (dirTurrel >= 270)
+    if ((dirTurrel <= 361) && (dirTurrel >= 180)
         && (dirMouse >= 0) && (dirMouse <= 90)) {
         dirTurrel -= 360;
         sign = 1;
     }
 
-    if ((dirMouse <= 361) && (dirMouse >= 270)
+    if ((dirMouse <= 361) && (dirMouse >= 180)
         && (dirTurrel >= 0) && (dirTurrel <= 90)) {
         dirTurrel += 360;
         sign = -1;
     }
 
     dirTurrel += sign * speedTurrel / 1000;
-    //if (dirTurrel >= 3)
     spriteTurrel.setRotation(dirTurrel);
 }
 
@@ -189,4 +196,19 @@ void Tank::getDamage(int damage)
 bool Tank::isAlive()
 {
     return life;
+}
+
+void Tank::backToPrevPos(int direction, int rotation, Vector2f backupPos)
+{
+    if (direction == 1) {
+        position.x = backupPos.x -
+            SPEED_OF_RETURNING * cos(angle * PI / 180);
+        position.y = backupPos.y -
+            SPEED_OF_RETURNING * sin(angle * PI / 180);
+    } else if (direction == -1) {
+        position.x = backupPos.x +
+            SPEED_OF_RETURNING * cos(angle * PI / 180);
+        position.y = backupPos.y +
+            SPEED_OF_RETURNING * sin(angle * PI / 180);
+    }
 }

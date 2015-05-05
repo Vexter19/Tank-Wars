@@ -52,13 +52,13 @@ bool GameObject::checkCollision(GameObject *obj)
 // Преобразование расстояния из м в пикс
 double convertMeters(double meters)
 {
-    return (meters * 21.34);
+    return (meters * 15.6);
 }
 
 // Преобразование скорости из км/ч в пикс/с
 double convertSpeed(double speed)
 {
-    return (speed * 5.92);
+    return (speed * 3.95);
 }
 
 double sqr(double x)
@@ -76,4 +76,23 @@ std::string numToStr(double number)
     std::ostringstream buff;
     buff << number;
     return buff.str();
+}
+
+double scalarProd(Vector2f a, Vector2f b)
+{
+    Vector2f result;
+    return (a.x * b.x + a.y * b.y);
+}
+
+double vectorLength(Vector2f a)
+{
+    return sqrt(sqr(a.x) + sqr(a.y));
+}
+
+Vector2f normalizeVector(Vector2f a) {
+    Vector2f result;
+    double length = vectorLength(a);
+    result.x = a.x / length;
+    result.y = a.y / length;
+    return result;
 }

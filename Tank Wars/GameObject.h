@@ -11,7 +11,13 @@ using namespace sf;
 
 double convertMeters(double meters);
 double convertSpeed(double speed);
+
 double sqr(double x);
+
+double scalarProd(Vector2f a, Vector2f b);
+double vectorLength(Vector2f a);
+Vector2f normalizeVector(Vector2f a);
+
 std::string numToStr(double number);
 
 class GameObject

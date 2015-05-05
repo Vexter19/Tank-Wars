@@ -15,5 +15,5 @@ public:
     Map(Texture &background, Texture &texObjects,
         std::list<GameObject*> &objects, int lvl);
     void draw(RenderWindow &window, std::list<GameObject*> &objects);
+    Vector2f getSize();
 };
-
