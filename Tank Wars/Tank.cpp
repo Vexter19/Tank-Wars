@@ -92,47 +92,7 @@ void Tank::update(double time, short int direction, short int rotation,
 
 void Tank::rotateTurrel(Vector2i mouseVector)
 {
-    double dirMouse = (180 / PI * atan((mouseVector.y - position.y) /
-        (mouseVector.x - position.x))); 
-    if (mouseVector.x < position.x) {
-        dirMouse += 180;
-    } else if (mouseVector.y < position.y) {
-        dirMouse += 360;
-    }
-
-    if (dirMouse >= 360) {
-        dirMouse -= 360;
-    }
-
-    double dirDiff = dirMouse - dirTurrel;
-
-    /*if ((dirTurrel <= 360 && dirTurrel >= 180)
-        && (dirMouse >= 0 && dirMouse <= 90)) {
-        dirDiff = -dirDiff;
-    }*/
-
-    int sign;  
-    if (dirDiff > 1) {
-        sign = 1;
-    } else if (dirDiff < -1) {
-        sign = -1;
-    } else {
-        sign = 0;
-    }
-
-    if ((dirTurrel <= 361) && (dirTurrel >= 180)
-        && (dirMouse >= 0) && (dirMouse <= 90)) {
-        dirTurrel -= 360;
-        sign = 1;
-    }
-
-    if ((dirMouse <= 361) && (dirMouse >= 180)
-        && (dirTurrel >= 0) && (dirTurrel <= 90)) {
-        dirTurrel += 360;
-        sign = -1;
-    }
-
-    dirTurrel += sign * speedTurrel / 1000;
+    dirTurrel += rotate((Vector2f)mouseVector, dirTurrel) * speedTurrel / 1000;
     spriteTurrel.setRotation(dirTurrel);
 }
 
@@ -211,4 +171,49 @@ void Tank::backToPrevPos(int direction, int rotation, Vector2f backupPos)
         position.y = backupPos.y +
             SPEED_OF_RETURNING * sin(angle * PI / 180);
     }
+}
+
+int Tank::rotate(Vector2f point, double &dir)
+{
+    double dirPoint = (180 / PI * atan((point.y - position.y) /
+        (point.x - position.x)));
+    if (point.x < position.x) {
+        dirPoint += 180;
+    } else if (point.y < position.y) {
+        dirPoint += 360;
+    }
+
+    if (dirPoint >= 360) {
+        dirPoint -= 360;
+    }
+
+    double dirDiff = dirPoint - dir;
+
+    /*if ((dir <= 360 && dir >= 180)
+    && (dirPoint >= 0 && dirPoint <= 90)) {
+    dirDiff = -dirDiff;
+    }*/
+
+    int sign;
+    if (dirDiff > 1) {
+        sign = 1;
+    } else if (dirDiff < -1) {
+        sign = -1;
+    } else {
+        sign = 0;
+    }
+
+    if ((dir <= 361) && (dir >= 180)
+        && (dirPoint >= 0) && (dirPoint <= 90)) {
+        dir -= 360;
+        sign = 1;
+    }
+
+    if ((dirPoint <= 361) && (dirPoint >= 180)
+        && (dir >= 0) && (dir <= 90)) {
+        dir += 360;
+        sign = -1;
+    }
+
+    return sign;
 }

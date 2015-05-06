@@ -116,5 +116,8 @@
     <ClInclude Include="MouseCursor.h">
       <Filter>Заголовочные файлы\GameObjects</Filter>
     </ClInclude>
+    <ClInclude Include="temp.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

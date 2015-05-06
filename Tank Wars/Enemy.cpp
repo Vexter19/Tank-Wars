@@ -12,6 +12,16 @@ Enemy::Enemy(Vector2f pos, Texture *texDynObjs, Texture &tex, IntRect rect, IntR
     this->health = 200;
     direction = 0;
     rotation = 0;
+    IntRect temp = this->sprite.getTextureRect();
+    bigSprite.setOrigin(temp.width / 2, temp.height / 2);
+    temp.width *= 3;
+    
+    travelled = 0;
+
+    // ”брать. ќтображать текстуру направлени€ танка
+    bigSprite.setTexture(*texDynObjs);
+    bigSprite.setTextureRect(temp);
+    bigSprite.setColor(Color::Red);
 }
 
 void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
@@ -21,86 +31,102 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
     vecPlayer.x = player.getPos().x - position.x;
     vecPlayer.y = player.getPos().y - position.y;
     if (vectorLength(vecPlayer) < VISIBILITY) {
-        alert = true;
+        alert = false;
     } else {
         alert = false;
     }
-    if (alert == false) {
-        // —покойное поведение врага
-        direction = 1;
-        Tank::update(time, direction, rotation, objects, bullets, anims);
-    } else {
-        // ¬раг видит игрока
-        
-        if (player.isAlive()) {
-            direction = 0;
+    if (alert == false) { // ≈сли враг не видит игрока
+        // поворачиваем на случайный угол
+        // пока не проехали нужное рассто€ние
+        travelled += 1 / 1000;
+        if (travelled < 10) {
+            for (std::list<GameObject*>::iterator it = objects.begin();
+                it != objects.end(); ++it) {
+                GameObject *obj = *it;
+                if (Collision::BoundingBoxTest(bigSprite, obj->getSprite()) ||
+                    isOutOfMap()) {
+                    // ≈сли на пути есть объект
+                    srand(time);
+                    int randDir;
+                    
+                    if ((rand() % 2) == 0) {
+                        randDir = -1;
+                        prevRandDir = randDir;
+                    } else {
+                        randDir = 1;
+                        prevRandDir = randDir;
+                    }
+                    if (prevRandDir == randDir) {
+                        randDir *= -1;
+                    }
+                    double backupAngle = bigSprite.getRotation();
+                    bigSprite.setRotation(backupAngle + randDir * TRY_ROTATE_ANGLE);
 
-            double scalar;
-
-            // ѕоворот корпуса лбом к игроку
-            scalar = scalarProd(normalizeVector(vecPlayer),
-                Vector2f(cos(angle * PI / 180), sin(angle * PI / 180)));
-
-            double dirPlayer = (180 / PI * atan((player.getPos().y - position.y) /
-                (player.getPos().x - position.x)));
-            if (player.getPos().x < position.x) {
-                dirPlayer += 180;
-            } else if (player.getPos().y < position.y) {
-                dirPlayer += 360;
+                    if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())
+                        == false && !isOutOfMap()) {
+                        rotation = 1;
+                        break;
+                    } else {
+                        bigSprite.setRotation(backupAngle - randDir * TRY_ROTATE_ANGLE);
+                        if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())
+                            == false && !isOutOfMap()) {
+                            rotation = -1;
+                            break;
+                        }
+                    }
+                    //bigSprite.setRotation(backupAngle);
+                } else {
+                    direction = 1;
+                    rotation = 0;
+                }
+                if (isOutOfMap()) {
+                    direction = -1;
+                }
             }
-
-            if (dirPlayer >= 360) {
-                dirPlayer -= 360;
-            }
-
-            double dirDiff = dirPlayer - angle;
-
-            if (dirDiff > 1) {
-                rotation = 1;
-            } else if (dirDiff < -1) {
-                rotation = -1;
-            } else {
-                rotation = 0;
-            }
-
-            std::cout << angle << "  " << dirPlayer << std::endl;
-
-            if ((angle <= 361) && (angle >= 270)
-                && (dirPlayer >= 0) && (dirPlayer <= 90)) {
-                angle -= 360;
-                rotation = 1;
-            }
-
-            if ((dirPlayer <= 361) && (dirPlayer >= 270)
-                && (angle >= 0) && (angle <= 90)) {
-                angle += 360;
-                rotation = -1;
-            }
-
-            if (scalar > COS_30) {
-                rotation = 0;
-            }
-
-            // ѕоворот башни на игрока
-            rotateTurrel((Vector2i)player.getPos());
-
-            /* ≈сли угол между вектором направлени€ башни врага
-            и игроком меньше 10 градусов, то можно стрел€ть */
-            scalar = scalarProd(normalizeVector(vecPlayer),
-                Vector2f(cos(dirTurrel * PI / 180), sin(dirTurrel * PI / 180)));
-            //std::cout << scalar << std::endl;
-            //std::cout << vecPlayer.x << "  " << vecPlayer.y << std::endl;
-            
-            if (scalar > COS_10) {                                    
-                fire(bullets, *texDynamicObjects);
-            }
-
-
-            Tank::update(time, direction, rotation, objects, bullets, anims);
-            GameObject *objPlayer = &player;
-            if (checkCollision(objPlayer) == true) {
-                Tank::update(time, -direction, -rotation, objects, bullets, anims);
-            }
+            // едем вперЄд
+            // если впереди преп€тствие
+            // провер€ем нет ли преп€тстви€ по направлению +45 градусов
+            // если нет, поворачиваем вправо пока путь не будет свободен
+            // если есть, то провер€ем направление -45
+            // поворачиваем влево
+            // если преп€тствие нет, просто едем вперЄд
+            // если впереди край карты
+            //  пробуем развернутьс€
         }
+        // когда проехали n метров
+        // останавливаемс€ на несколько секунд
+        // вращаем башней
+        // продолжаем движение
+    } else { // ≈сли враг видит игрока
+        // остановка 
+        // поворачиваем башню на игрока
+        // поворачиваем корпус
+        // если нет преп€тствий то стрел€ем
+        // если есть
+            // обходим преп€тствие
+    }
+
+    Tank::update(time, direction, rotation, objects, bullets, anims);
+    GameObject *objPlayer = &player;
+    if (checkCollision(objPlayer) == true) {
+        Tank::update(time, -direction, -rotation, objects, bullets, anims);
+    }
+
+    bigSprite.setPosition(position);
+    bigSprite.setRotation(angle);
+}
+
+bool Enemy::isOutOfMap()
+{
+    Vector2f point;
+    point.x = bigSprite.getPosition().x + bigSprite.getTextureRect().width *
+        cos(bigSprite.getRotation() * PI / 180);
+    point.y = bigSprite.getPosition().y + bigSprite.getTextureRect().width *
+        sin(bigSprite.getRotation() * PI / 180);
+    if (point.x > mapWidth || point.x < 0 ||
+        point.y > mapHeight || point.y < 0) {
+        return true;
+    } else {
+        return false;
     }
 }

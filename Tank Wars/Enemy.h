@@ -7,6 +7,7 @@
 #define VISIBILITY 700
 #define COS_10 0.98
 #define COS_30 0.86
+#define TRY_ROTATE_ANGLE 90
 
 class Enemy :
     public Tank
@@ -14,8 +15,13 @@ class Enemy :
 private:
     Texture *texDynamicObjects;
     bool alert;
+    double travelled;
+    int prevRandDir;
+
+    bool isOutOfMap();
 public:
     double direction, rotation;
+    Sprite bigSprite;
 
     Enemy(Vector2f pos, Texture *texDynObjs, Texture &tex, IntRect rect, IntRect rectTurrel,
         int turrelCenterX, int diffTankTurrel, double maxSpeed,

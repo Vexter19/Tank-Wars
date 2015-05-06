@@ -62,10 +62,33 @@ int Game::Run(sf::RenderWindow &window)
     while (running) {
 
         while (window.pollEvent(event)) {
-            if ((event.type == Event::Closed) ||
-                (Keyboard::isKeyPressed(Keyboard::Escape))) {
-                return 2;
+            if (event.type == Event::Closed) {
+                return - 1;
             }
+        }
+
+        if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+            // Создаём экран "Меню паузы"
+            std::vector<MenuPoint> menuPoints;
+            MenuPoint point;
+
+            point.text.setString(L"Продолжить");
+            point.value = 1;
+            menuPoints.push_back(point);
+            point.text.setString(L"Выход");
+            point.value = -1;
+            menuPoints.push_back(point);
+
+            Menu pauseMenu(menuPoints);
+            switch (pauseMenu.Run(window)) {
+            case 1: {
+                        continue; break;
+            }
+            case -1: {
+                            return -1; break;
+            }
+            }
+
         }
 
         direction = 0;
@@ -156,6 +179,7 @@ int Game::Run(sf::RenderWindow &window)
             Tank playerTank = player;
             (*it_enemies)->update(time, playerTank, bullets, objects, anims);
             (*it_enemies)->draw(window);
+            window.draw((*it_enemies)->bigSprite); // Потом удалить
         }
 
         for (it_bullets = bullets.begin(); it_bullets != bullets.end(); it_bullets++) {

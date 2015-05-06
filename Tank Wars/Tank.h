@@ -30,6 +30,7 @@ protected:
     bool life;
 
     void backToPrevPos(int direction, int rotation, Vector2f backupPos);
+    int rotate(Vector2f point, double &dir);
 
     //Turrel
     double dirTurrel;
