@@ -16,7 +16,9 @@ Enemy::Enemy(Vector2f pos, Texture *texDynObjs, Texture &tex, IntRect rect, IntR
     bigSprite.setOrigin(temp.width / 2, temp.height / 2);
     temp.width *= 3;
     
-    travelled = 0;
+    this->travelled = 0;
+    distance = GO_DISTANCE;
+    rotated = 0;
 
     // Убрать. Отображать текстуру направления танка
     bigSprite.setTexture(*texDynObjs);
@@ -31,24 +33,27 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
     vecPlayer.x = player.getPos().x - position.x;
     vecPlayer.y = player.getPos().y - position.y;
     if (vectorLength(vecPlayer) < VISIBILITY) {
-        alert = false;
+        alert = true;
     } else {
         alert = false;
     }
     if (alert == false) { // Если враг не видит игрока
-        // поворачиваем на случайный угол
+        // TODO поворачиваем на случайный угол
         // пока не проехали нужное расстояние
-        travelled += 1 / 1000;
-        if (travelled < 10) {
+        if (travelled < distance) {
+            stopTimeGone = 0;
+            travelled += 0.001;
             for (std::list<GameObject*>::iterator it = objects.begin();
                 it != objects.end(); ++it) {
+
                 GameObject *obj = *it;
                 if (Collision::BoundingBoxTest(bigSprite, obj->getSprite()) ||
                     isOutOfMap()) {
-                    // Если на пути есть объект
+                    // Если на пути есть объект или скоро конец карты...
                     srand(time);
                     int randDir;
                     
+                    // Случайно выбираем направление, в каком объезжать препятствие
                     if ((rand() % 2) == 0) {
                         randDir = -1;
                         prevRandDir = randDir;
@@ -56,57 +61,156 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
                         randDir = 1;
                         prevRandDir = randDir;
                     }
+
+                    // Сравниваем направление поворота с предыдущим.
+                    // Если они одинаковые, то меняем направление.
                     if (prevRandDir == randDir) {
                         randDir *= -1;
                     }
+
                     double backupAngle = bigSprite.getRotation();
+
+                    // Пробуем повернуться в одну сторону
                     bigSprite.setRotation(backupAngle + randDir * TRY_ROTATE_ANGLE);
 
+                    // Если в этом направлении нет препятствий, то поворачиваемся так
                     if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())
                         == false && !isOutOfMap()) {
-                        rotation = 1;
+                        rotation = randDir;
                         break;
                     } else {
+                        // Иначе пробуем повернуться в противоположном направлении
                         bigSprite.setRotation(backupAngle - randDir * TRY_ROTATE_ANGLE);
+
                         if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())
                             == false && !isOutOfMap()) {
-                            rotation = -1;
+                            rotation = randDir * -1;
                             break;
+                        } else {
+                            direction = -1;
+                            rotation = randDir;
                         }
                     }
-                    //bigSprite.setRotation(backupAngle);
                 } else {
+                    // Если впереди чисто, просто едем вперёд
                     direction = 1;
                     rotation = 0;
+
+                    // Сохраняем вектор направления
+                    calmRotateTo1.x = this->getPos().x + 10 * cos(angle * PI / 180);
+                    calmRotateTo1.y = this->getPos().y + 10 * sin(angle * PI / 180);
                 }
+
                 if (isOutOfMap()) {
                     direction = -1;
                 }
             }
-            // едем вперёд
-            // если впереди препятствие
-            // проверяем нет ли препятствия по направлению +45 градусов
-            // если нет, поворачиваем вправо пока путь не будет свободен
-            // если есть, то проверяем направление -45
-            // поворачиваем влево
-            // если препятствие нет, просто едем вперёд
-            // если впереди край карты
-            //  пробуем развернуться
+
+            rotateTurrel((Vector2i)calmRotateTo1);
+        } else {
+
+            // Как только пррекратили движение, определяем направления,
+            // в которых вращать башню во время остановки
+            if (stopTimeGone == 0) {
+                calmRotateTo1.x = this->getPos().x + 10 * cos((dirTurrel + 45) * PI / 180);
+                calmRotateTo1.y = this->getPos().y + 10 * sin((dirTurrel + 45) * PI / 180);
+                calmRotateAngle1 = dirTurrel + 45;
+                calmRotateTo2.x = this->getPos().x + 10 * cos((dirTurrel - 45) * PI / 180);
+                calmRotateTo2.y = this->getPos().y + 10 * sin((dirTurrel - 45) * PI / 180);
+                calmRotateAngle2 = dirTurrel - 45;
+                srand(time * 100);
+                stopTime = RAND_STOP_TIME + (rand() % 6) - 3;
+            }
+
+            if (stopTimeGone < stopTime) {
+                stopTimeGone += time / 1000;
+                direction = 0;
+                rotation = 0;
+
+                if (rotated == 0) {
+                    rotateTurrel((Vector2i)calmRotateTo1);
+                    if ((dirTurrel < (calmRotateAngle1 + 5)) &&
+                        (dirTurrel >(calmRotateAngle1 - 5))) {
+                        rotated = 1;
+                    }
+                }
+
+                if (rotated == 1) {
+                    rotateTurrel((Vector2i)calmRotateTo2);
+                }    
+            } else {
+                rotated = 0;
+                travelled = 0;
+                srand(time * 100);
+                distance = GO_DISTANCE + (rand() % 10) - 5;
+            }
         }
-        // когда проехали n метров
-        // останавливаемся на несколько секунд
-        // вращаем башней
-        // продолжаем движение
-    } else { // Если враг видит игрока
-        // остановка 
-        // поворачиваем башню на игрока
-        // поворачиваем корпус
-        // если нет препятствий то стреляем
-        // если есть
-            // обходим препятствие
+    } else {
+        // Если враг видит игрока
+        if (player.isAlive()) {
+            for (std::list<GameObject*>::iterator it = objects.begin();
+                it != objects.end(); ++it) {
+
+                GameObject *obj = *it;
+                if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())) {
+                    // Если на пути есть объект
+                    double backupAngle = bigSprite.getRotation();
+                    bigSprite.setRotation(backupAngle + TRY_ROTATE_ANGLE);
+
+                    if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())) {
+                        //bigSprite.setRotation(backupAngle - TRY_ROTATE_ANGLE);
+                        rotation = -1;
+                    } else {
+                        rotation = 1;
+                    }
+                } else {
+                    direction = 1;
+                    rotation = 0;
+                }
+            }
+
+            double scalar;
+
+            // Поворот корпуса лбом к игроку
+            scalar = scalarProd(normalizeVector(vecPlayer),
+                Vector2f(cos(angle * PI / 180), sin(angle * PI / 180)));
+
+            rotation = rotate(player.getPos(), angle);
+
+            if (scalar > COS_30) {
+                rotation = 0;
+            }
+
+            // Поворот башни на игрока
+            rotateTurrel((Vector2i)player.getPos());
+
+            /* Если угол между вектором направления башни врага
+            и игроком меньше 10 градусов, а также если нет препятствий 
+            на пути, то можно стрелять */
+            scalar = scalarProd(normalizeVector(vecPlayer),
+                Vector2f(cos(dirTurrel * PI / 180), sin(dirTurrel * PI / 180)));
+
+            if (scalar > COS_10) {
+                bool canAimTo = true;
+
+                for (std::list<GameObject*>::iterator it = objects.begin();
+                    it != objects.end(); ++it) {
+                    GameObject *obj = *it;
+                    if (collisionLineRect((IntRect)(*it)->getSprite().getGlobalBounds(), player.getPos())) {
+                        canAimTo = false;
+                        break;
+                    }
+                }
+
+                if (canAimTo == true) {
+                    fire(bullets, *texDynamicObjects);
+                }
+            }
+        }
     }
 
     Tank::update(time, direction, rotation, objects, bullets, anims);
+
     GameObject *objPlayer = &player;
     if (checkCollision(objPlayer) == true) {
         Tank::update(time, -direction, -rotation, objects, bullets, anims);
@@ -129,4 +233,51 @@ bool Enemy::isOutOfMap()
     } else {
         return false;
     }
+}
+
+bool Enemy::collisionLineRect(IntRect rect, Vector2f playerPos)
+{
+    if ((getCode(rect, this->getPos()) & getCode(rect, playerPos)) == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+int Enemy::getCode(IntRect rect, Vector2f point)
+{
+    if (point.x < rect.left) {
+        if (point.y < rect.top) {
+            return 9;
+        }
+        if ((point.y > rect.top) && (point.y < rect.top + rect.height)) {
+            return 1;
+        }
+        if (point.y > rect.top + rect.height) {
+            return 5;
+        }
+    }
+    if ((point.x > rect.left) && (point.x < rect.left + rect.width)) {
+        if (point.y < rect.top) {
+            return 8;
+        }
+        if ((point.y > rect.top) && (point.y < rect.top + rect.height)) {
+            return 0;
+        }
+        if (point.y > rect.top + rect.height) {
+            return 4;
+        }
+    }
+    if (point.x > rect.left + rect.width) {
+        if (point.y < rect.top) {
+            return 10;
+        }
+        if ((point.y > rect.top) && (point.y < rect.top + rect.height)) {
+            return 2;
+        }
+        if (point.y > rect.top + rect.height) {
+            return 6;
+        }
+    }
+
 }
