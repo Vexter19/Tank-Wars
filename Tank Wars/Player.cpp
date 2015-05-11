@@ -1,12 +1,11 @@
 #include "Player.h"
 
 
-Player::Player(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
-    int turrelCenterX, int diffTankTurrel, double maxSpeed,
-    double speedOfRotation, double speedTurrel, int health,
-    double rechargeTime, int damage, std::string name) :
-    Tank(pos, tex, rect, rectTurrel, turrelCenterX, diffTankTurrel,
-    maxSpeed, speedOfRotation, speedTurrel, rechargeTime, damage, name, health)
+Player::Player(Vector2f pos, TankCharacteristic tank) :
+    Tank(pos, tank.texturePath, tank.texRectBody, tank.texRectTurrel,
+    tank.turrelCenterX, tank.diffTankTurrel, tank.maxSpeed,
+    tank.speedOfRotation, tank.speedTurrel, tank.rechargeTime, tank.damage,
+    tank.name, tank.health)
 {
     
     this->health = health;

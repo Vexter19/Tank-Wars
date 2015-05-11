@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Bullet.h"
 #include "View.h"
+#include "TankCharacteristics.h"
 
 #define SPEED_OF_RETURNING 0.1
 
@@ -18,6 +19,7 @@ class Tank :
 {
 protected:
     //Tank
+    Texture texTurrel;
     double dx, dy;
     double speedOfRotation;
     double maxSpeed;
@@ -38,7 +40,7 @@ protected:
     Sprite spriteTurrel;
 public:
     //Tank
-    Tank(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
+    Tank(Vector2f pos, std::string texPath, IntRect rect, IntRect rectTurrel,
         int turrelCenterX, int diffTankTurrel, double maxSpeed,
         double speedOfRotation, double speedTurrel,
         double rechargeTime, int damage, std::string name, int health);

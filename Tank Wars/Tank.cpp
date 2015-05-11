@@ -1,11 +1,11 @@
 #include "Tank.h"
 
 
-Tank::Tank(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
+Tank::Tank(Vector2f pos, std::string texPath, IntRect rect, IntRect rectTurrel,
     int turrelCenterX, int diffTankTurrel, double maxSpeed,
     double speedOfRotation, double speedTurrel,
     double rechargeTime, int damage, std::string name, int health) :
-    GameObject(pos, tex, rect)
+    GameObject(pos, texPath, rect)
 {
     dirTurrel = 0;
     this->speedOfRotation = speedOfRotation;
@@ -19,7 +19,8 @@ Tank::Tank(Vector2f pos, Texture &tex, IntRect rect, IntRect rectTurrel,
     remainingTime = rechargeTime;
     this->life = true;
 
-    spriteTurrel.setTexture(tex);
+    texTurrel.loadFromFile(texPath);
+    spriteTurrel.setTexture(texTurrel);
     spriteTurrel.setTextureRect(rectTurrel);
     spriteTurrel.setOrigin(turrelCenterX, rectTurrel.height / 2);
 }
@@ -92,7 +93,7 @@ void Tank::update(double time, short int direction, short int rotation,
 
 void Tank::rotateTurrel(Vector2i mouseVector)
 {
-    dirTurrel += rotate((Vector2f)mouseVector, dirTurrel) * speedTurrel / 1000;
+    dirTurrel += rotate((Vector2f)mouseVector, dirTurrel) * speedTurrel / 100;
     spriteTurrel.setRotation(dirTurrel);
 }
 

@@ -5,13 +5,33 @@ GameObject::GameObject(Vector2f pos, Texture &tex, IntRect rect)
 {
     position.x = pos.x;
     position.y = pos.y;
+
     sprite.setTexture(tex);
     sprite.setTextureRect(rect);
     sprite.setOrigin(Vector2f((float)rect.width / 2, (float)rect.height / 2));
     sprite.setPosition(position);
+
     speed = 0;
     angle = 0;
 }
+
+GameObject::GameObject(Vector2f pos, std::string texPath, IntRect rect)
+{
+    position.x = pos.x;
+    position.y = pos.y;
+
+    
+    texture.loadFromFile(texPath);
+
+    sprite.setTexture(texture);
+    sprite.setTextureRect(rect);
+    sprite.setOrigin(Vector2f((float)rect.width / 2, (float)rect.height / 2));
+    sprite.setPosition(position);
+
+    speed = 0;
+    angle = 0;
+}
+
 
 Vector2f GameObject::getPos()
 {

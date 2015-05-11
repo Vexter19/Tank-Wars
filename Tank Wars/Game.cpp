@@ -39,11 +39,14 @@ int Game::Run(sf::RenderWindow &window)
 
     Map map(texMap, texMapObjects, objects, 0);
 
-    Player player(Vector2f(500, 500), USSR_T34);
+    Player player(Vector2f(200, 200), ussrT34);
 
     Crosshair crosshair(Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), texGUI, IntRect(0, 0, 24, 24));
 
-    enemies.push_back(new Enemy(Vector2f(1000, 1000), &texDynamicObjects, GERMANY_TIGER2));
+    level = 0;
+
+    //enemies.push_back(new Enemy(Vector2f(0, 100), &texDynamicObjects, GERMANY_TIGER2));
+    //enemies.push_back(new Enemy(Vector2f(2000, 1500), &texDynamicObjects, GERMANY_TIGER2));
 
     Vector2u windowSize;
     view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
@@ -60,10 +63,104 @@ int Game::Run(sf::RenderWindow &window)
     bool running = true;
 
     while (running) {
+        // Проверяем если нет врагов, то добавляем новых
+        if (enemies.empty()) {
+            level++;
+
+            TankCharacteristic *newEnemy;
+            if (level <= 5) {
+                newEnemy = &germanyTiger2;
+            } else if (level <= 10) {
+                newEnemy = &germanyTiger2;
+            } else if (level <= 15) {
+                newEnemy = &germanyTiger2;
+            } else if (level <= 20) {
+                newEnemy = &germanyTiger2;
+            } else if (level <= 25) {
+                newEnemy = &germanyTiger2;
+            }
+
+            RespawnInfo respInfo = getRespawnInfo(level * 100);
+            RespawnInfo respInfo2;
+            Enemy* thisEnemy;
+
+            double multiplier;
+            switch (level % 5) {
+                case 1:
+                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
+                    thisEnemy = *enemies.begin();
+                    thisEnemy->setAngle(respInfo.spawnRotation);
+
+                    multiplier = 1;
+                    break;
+                case 2:
+                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
+                    thisEnemy = *enemies.begin();
+                    thisEnemy->setAngle(respInfo.spawnRotation);
+
+                    respInfo2 = getRespawnInfo(level * 200);
+
+                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
+                    thisEnemy++;
+                    thisEnemy->setAngle(respInfo.spawnRotation);
+
+                    multiplier = 1;
+                    break;
+                case 3:
+                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
+                    thisEnemy = *enemies.begin();
+                    thisEnemy->setAngle(respInfo.spawnRotation);
+
+                    respInfo2 = getRespawnInfo(level * 200);
+
+                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
+                    thisEnemy++;
+                    thisEnemy->setAngle(respInfo.spawnRotation);
+
+                    multiplier = 1.5;
+                    break;
+                case 4:
+                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
+                    thisEnemy = *enemies.begin();
+                    thisEnemy->setAngle(respInfo.spawnRotation);
+
+                    respInfo2 = getRespawnInfo(level * 200);
+
+                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
+                    thisEnemy++;
+                    thisEnemy->setAngle(respInfo.spawnRotation);
+
+                    multiplier = 2;
+                    break;
+
+                case 0:
+                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
+                    thisEnemy = *enemies.begin();
+                    thisEnemy->setAngle(respInfo.spawnRotation);
+
+                    respInfo2 = getRespawnInfo(level * 200);
+
+                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
+                    thisEnemy++;
+                    thisEnemy->setAngle(respInfo.spawnRotation);
+
+                    multiplier = 2;
+                    break;
+            }
+
+            for (it_enemies = enemies.begin(); it_enemies != enemies.end();
+                it_enemies++) {
+                (*it_enemies)->setHealth((double)thisEnemy->getHealth() *
+                    multiplier);
+                (*it_enemies)->setDamageValue((double)thisEnemy->getDamageValue() *
+                    multiplier);
+            }
+
+        }
 
         while (window.pollEvent(event)) {
             if (event.type == Event::Closed) {
-                return - 1;
+                return -1;
             }
         }
 
@@ -81,12 +178,12 @@ int Game::Run(sf::RenderWindow &window)
 
             Menu pauseMenu(menuPoints);
             switch (pauseMenu.Run(window)) {
-            case 1: {
-                        continue; break;
-            }
-            case -1: {
-                            return -1; break;
-            }
+                case 1:
+                    continue;
+                    break;
+                case -1:
+                    return -1;
+                    break;
             }
 
         }
@@ -113,27 +210,27 @@ int Game::Run(sf::RenderWindow &window)
 
         // Зум. Работает косячно.
         /*if (event.type == Event::MouseWheelMoved) {
-        Vector2f backupView = view.getSize();
-        std::cout << backupView.x << "  " << backupView.y << std::endl;
-        FloatRect newView;
-        newView.left = 0;
-        newView.top = 0;
+            Vector2f backupView = view.getSize();
+            std::cout << backupView.x << "  " << backupView.y << std::endl;
+            FloatRect newView;
+            newView.left = 0;
+            newView.top = 0;
 
-        if (event.mouseWheel.delta < 0) {
-        if (backupView.x < 1920 && backupView.y < 1080) {
-        newView.width = backupView.x * 1.1;
-        newView.height = backupView.y * 1.1;
-        view.reset(newView);
-        }
-        }
-        if (event.mouseWheel.delta > 0) {
-        if (backupView.x > 960 && backupView.y > 540) {
-        newView.width = backupView.x / 1.1;
-        newView.height = backupView.y / 1.1;
-        view.reset(newView);
-        }
-        }
-        event.mouseWheel.delta = 0;
+            if (event.mouseWheel.delta < 0) {
+                if (backupView.x < 1920 && backupView.y < 1080) {
+                    newView.width = backupView.x * 1.1;
+                    newView.height = backupView.y * 1.1;
+                    view.reset(newView);
+                }
+            }
+            if (event.mouseWheel.delta > 0) {
+                if (backupView.x > 960 && backupView.y > 540) {
+                    newView.width = backupView.x / 1.1;
+                    newView.height = backupView.y / 1.1;
+                    view.reset(newView);
+                }
+            }
+            event.mouseWheel.delta = 0;
         }*/
 
 
@@ -165,6 +262,17 @@ int Game::Run(sf::RenderWindow &window)
             }
         }
 
+        for (it_enemies = enemies.begin(); it_enemies != enemies.end();) {
+            Enemy *e = *it_enemies;
+
+            if ((*it_enemies)->isAlive() == false) {
+                it_enemies = enemies.erase(it_enemies);
+                delete e;
+            } else {
+                it_enemies++;
+            }
+        }
+
         windowSize = window.getSize();
         Vector2i mousePos = getMouseCoords(Mouse::getPosition(window), windowSize);
         player.update(time, direction, rotation, objects, enemies, bullets, anims);
@@ -179,7 +287,7 @@ int Game::Run(sf::RenderWindow &window)
             Tank playerTank = player;
             (*it_enemies)->update(time, playerTank, bullets, objects, anims);
             (*it_enemies)->draw(window);
-            window.draw((*it_enemies)->bigSprite); // Потом удалить
+            // window.draw((*it_enemies)->bigSprite); // Потом удалить
         }
 
         for (it_bullets = bullets.begin(); it_bullets != bullets.end(); it_bullets++) {
@@ -192,10 +300,55 @@ int Game::Run(sf::RenderWindow &window)
             (*it_anims)->draw(window);
         }
 
+
+
         crosshair.update((Vector2f)mousePos, enemies, player);
         crosshair.draw(window);
 
         window.display();
     }
     return 0;
+}
+
+RespawnInfo Game::getRespawnInfo(int randomizer)
+{
+    srand(randomizer);
+    int corn = rand() % 8;
+    RespawnInfo inf;
+
+    switch (corn) {
+        case 0:
+            inf.spawnPos = Vector2f(0, 100);
+            inf.spawnRotation = 0;
+            break;
+        case 1:
+            inf.spawnPos = Vector2f(100, 0);
+            inf.spawnRotation = 90;
+            break;
+        case 2:
+            inf.spawnPos = Vector2f(mapWidth, 100);
+            inf.spawnRotation = 180;
+            break;
+        case 3:
+            inf.spawnPos = Vector2f(mapWidth - 100, 0);
+            inf.spawnRotation = 90;
+            break;
+        case 4:
+            inf.spawnPos = Vector2f(0, mapHeight - 100);
+            inf.spawnRotation = 0;
+            break;
+        case 5:
+            inf.spawnPos = Vector2f(100, mapHeight);
+            inf.spawnRotation = -90;
+            break;
+        case 6:
+            inf.spawnPos = Vector2f(mapWidth, mapHeight - 100);
+            inf.spawnRotation = 180;
+            break;
+        case 7:
+            inf.spawnPos = Vector2f(mapWidth - 100, mapHeight);
+            inf.spawnRotation = -90;
+            break;
+    }
+    return inf;
 }

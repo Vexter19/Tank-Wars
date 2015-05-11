@@ -35,11 +35,12 @@ int Menu::Run(RenderWindow &window)
 
     Font font;
     font.loadFromFile("calibrib.ttf");
-
-    
+  
     int menu = MENU_NULL;
 
     MouseCursor mouse(Vector2f(0, 0), texGUI, IntRect(30, 0, 20, 20));
+
+    //view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
 
     Vector2u windowSize;
     windowSize = window.getSize();

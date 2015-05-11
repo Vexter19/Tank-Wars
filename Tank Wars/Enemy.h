@@ -45,12 +45,19 @@ public:
     double direction, rotation;
     Sprite bigSprite;
 
-    Enemy(Vector2f pos, Texture *texDynObjs, Texture &tex, IntRect rect, IntRect rectTurrel,
-        int turrelCenterX, int diffTankTurrel, double maxSpeed,
-        double speedOfRotation, double speedTurrel, int health,
-        double rechargeTime, int damage, std::string name);
+    Enemy(Vector2f pos, Texture *texDynObjs, TankCharacteristic tank);
     void update(double time, Tank &player, std::list<Bullet*> &bullets,
         std::list<GameObject*> &objects, std::list<Animation*> &anims);
+    
+    void setAngle(double angle);
+
+    int getHealth();
+    void setHealth(int helath);
+
+    int getDamageValue();
+    void setDamageValue(int damage);
+
+    
 };
 
 #endif // !ENEMY_H

@@ -1,15 +1,14 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(Vector2f pos, Texture *texDynObjs, Texture &tex, IntRect rect, IntRect rectTurrel,
-    int turrelCenterX, int diffTankTurrel, double maxSpeed,
-    double speedOfRotation, double speedTurrel, int health,
-    double rechargeTime, int damage, std::string name) :
-    Tank(pos, tex, rect, rectTurrel, turrelCenterX, diffTankTurrel,
-    maxSpeed, speedOfRotation, speedTurrel, rechargeTime, damage, name, health)
+Enemy::Enemy(Vector2f pos, Texture *texDynObjs, TankCharacteristic tank) :
+    Tank(pos, tank.texturePath, tank.texRectBody, tank.texRectTurrel,
+    tank.turrelCenterX, tank.diffTankTurrel, tank.maxSpeed,
+    tank.speedOfRotation, tank.speedTurrel, tank.rechargeTime, tank.damage,
+    tank.name, tank.health)
 {
     this->texDynamicObjects = texDynObjs;
-    this->health = 200;
+    this->health = health;
     direction = 0;
     rotation = 0;
     IntRect temp = this->sprite.getTextureRect();
@@ -32,7 +31,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
     Vector2f vecPlayer; // Вектор между врагом и игроком
     vecPlayer.x = player.getPos().x - position.x;
     vecPlayer.y = player.getPos().y - position.y;
-    if (vectorLength(vecPlayer) < VISIBILITY) {
+    if ((vectorLength(vecPlayer) < VISIBILITY) && (player.isAlive())) {
         alert = true;
     } else {
         alert = false;
@@ -109,7 +108,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
             rotateTurrel((Vector2i)calmRotateTo1);
         } else {
 
-            // Как только пррекратили движение, определяем направления,
+            // Как только прекратили движение, определяем направления,
             // в которых вращать башню во время остановки
             if (stopTimeGone == 0) {
                 calmRotateTo1.x = this->getPos().x + 10 * cos((dirTurrel + 45) * PI / 180);
@@ -147,65 +146,66 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
         }
     } else {
         // Если враг видит игрока
-        if (player.isAlive()) {
-            for (std::list<GameObject*>::iterator it = objects.begin();
-                it != objects.end(); ++it) {
+        for (std::list<GameObject*>::iterator it = objects.begin();
+            it != objects.end(); ++it) {
 
-                GameObject *obj = *it;
+            GameObject *obj = *it;
+            if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())) {
+                // Если на пути есть объект
+                double backupAngle = bigSprite.getRotation();
+                bigSprite.setRotation(backupAngle + TRY_ROTATE_ANGLE);
+
                 if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())) {
-                    // Если на пути есть объект
-                    double backupAngle = bigSprite.getRotation();
-                    bigSprite.setRotation(backupAngle + TRY_ROTATE_ANGLE);
-
-                    if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())) {
-                        //bigSprite.setRotation(backupAngle - TRY_ROTATE_ANGLE);
-                        rotation = -1;
-                    } else {
-                        rotation = 1;
-                    }
+                    //bigSprite.setRotation(backupAngle - TRY_ROTATE_ANGLE);
+                    rotation = -1;
                 } else {
-                    direction = 1;
-                    rotation = 0;
+                    rotation = 1;
                 }
-            }
-
-            double scalar;
-
-            // Поворот корпуса лбом к игроку
-            scalar = scalarProd(normalizeVector(vecPlayer),
-                Vector2f(cos(angle * PI / 180), sin(angle * PI / 180)));
-
-            rotation = rotate(player.getPos(), angle);
-
-            if (scalar > COS_30) {
+            } else {
+                direction = 1;
                 rotation = 0;
             }
+        }
 
-            // Поворот башни на игрока
-            rotateTurrel((Vector2i)player.getPos());
+        double scalar;
 
-            /* Если угол между вектором направления башни врага
-            и игроком меньше 10 градусов, а также если нет препятствий 
-            на пути, то можно стрелять */
-            scalar = scalarProd(normalizeVector(vecPlayer),
-                Vector2f(cos(dirTurrel * PI / 180), sin(dirTurrel * PI / 180)));
+        // Поворот корпуса лбом к игроку
+        scalar = scalarProd(normalizeVector(vecPlayer),
+            Vector2f(cos(angle * PI / 180), sin(angle * PI / 180)));
 
-            if (scalar > COS_10) {
-                bool canAimTo = true;
+        rotation = rotate(player.getPos(), angle);
 
-                for (std::list<GameObject*>::iterator it = objects.begin();
-                    it != objects.end(); ++it) {
-                    GameObject *obj = *it;
-                    if (collisionLineRect((IntRect)(*it)->getSprite().getGlobalBounds(), player.getPos())) {
-                        canAimTo = false;
-                        break;
-                    }
-                }
+        if (scalar > COS_30) {
+            rotation = 0;
+        }
 
-                if (canAimTo == true) {
-                    fire(bullets, *texDynamicObjects);
+        // Поворот башни на игрока
+        rotateTurrel((Vector2i)player.getPos());
+
+        /* Если угол между вектором направления башни врага
+        и игроком меньше 10 градусов, а также если нет препятствий
+        на пути, то можно стрелять */
+        scalar = scalarProd(normalizeVector(vecPlayer),
+            Vector2f(cos(dirTurrel * PI / 180), sin(dirTurrel * PI / 180)));
+
+        if (scalar > COS_10) {
+            bool canAimTo = true;
+
+            for (std::list<GameObject*>::iterator it = objects.begin();
+                it != objects.end(); ++it) {
+                GameObject *obj = *it;
+                if (collisionLineRect((IntRect)(*it)->getSprite().getGlobalBounds(), player.getPos())) {
+                    canAimTo = false;
+                    break;
                 }
             }
+
+            if (canAimTo == true) {
+                fire(bullets, *texDynamicObjects);
+            }
+        }
+        if (vectorLength(vecPlayer) < 200) {
+            direction = -1;
         }
     }
 
@@ -280,4 +280,29 @@ int Enemy::getCode(IntRect rect, Vector2f point)
         }
     }
 
+}
+
+void Enemy::setAngle(double angle)
+{
+    this->angle = angle;
+}
+
+int Enemy::getHealth()
+{
+    return this->health;
+}
+
+void Enemy::setHealth(int helath)
+{
+    this->health = health;
+}
+
+int Enemy::getDamageValue()
+{
+    return this->damage;
+}
+
+void Enemy::setDamageValue(int damage)
+{
+    this->damage = damage;
 }

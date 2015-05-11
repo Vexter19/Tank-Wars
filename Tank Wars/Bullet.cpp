@@ -53,5 +53,8 @@ void Bullet::Destroy(std::list<Animation*> &anims)
 
 int Bullet::getDmg()
 {
-    return damage;
+    srand(this->angle * 100);
+    double diffDamage = damage * ((rand() % (DAMAGE_SCATTER * 2)) -
+        DAMAGE_SCATTER) / 100;
+    return damage + diffDamage;
 }

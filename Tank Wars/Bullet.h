@@ -5,6 +5,8 @@
 #include "GameObject.h"
 #include "Animation.h"
 
+#define DAMAGE_SCATTER 25
+
 using namespace sf;
 
 class Bullet :
