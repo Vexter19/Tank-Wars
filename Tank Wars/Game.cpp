@@ -12,10 +12,6 @@ int Game::Run(sf::RenderWindow &window)
 
     Clock clock;
 
-    Texture texPlayer;
-    texPlayer.loadFromFile("images/T-34.png");
-    Texture texEnemy;
-    texEnemy.loadFromFile("images/TigerII.png");
     Texture texDynamicObjects;
     texDynamicObjects.loadFromFile("images/DynamicObjects.png");
     Texture texMap;
@@ -39,7 +35,7 @@ int Game::Run(sf::RenderWindow &window)
 
     Map map(texMap, texMapObjects, objects, 0);
 
-    Player player(Vector2f(200, 200), ussrT34);
+    Player player(Vector2f(200, 200), germanyPZIV);
 
     Crosshair crosshair(Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), texGUI, IntRect(0, 0, 24, 24));
 
@@ -67,95 +63,7 @@ int Game::Run(sf::RenderWindow &window)
         if (enemies.empty()) {
             level++;
 
-            TankCharacteristic *newEnemy;
-            if (level <= 5) {
-                newEnemy = &germanyTiger2;
-            } else if (level <= 10) {
-                newEnemy = &germanyTiger2;
-            } else if (level <= 15) {
-                newEnemy = &germanyTiger2;
-            } else if (level <= 20) {
-                newEnemy = &germanyTiger2;
-            } else if (level <= 25) {
-                newEnemy = &germanyTiger2;
-            }
-
-            RespawnInfo respInfo = getRespawnInfo(level * 100);
-            RespawnInfo respInfo2;
-            Enemy* thisEnemy;
-
-            double multiplier;
-            switch (level % 5) {
-                case 1:
-                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
-                    thisEnemy = *enemies.begin();
-                    thisEnemy->setAngle(respInfo.spawnRotation);
-
-                    multiplier = 1;
-                    break;
-                case 2:
-                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
-                    thisEnemy = *enemies.begin();
-                    thisEnemy->setAngle(respInfo.spawnRotation);
-
-                    respInfo2 = getRespawnInfo(level * 200);
-
-                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
-                    thisEnemy++;
-                    thisEnemy->setAngle(respInfo.spawnRotation);
-
-                    multiplier = 1;
-                    break;
-                case 3:
-                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
-                    thisEnemy = *enemies.begin();
-                    thisEnemy->setAngle(respInfo.spawnRotation);
-
-                    respInfo2 = getRespawnInfo(level * 200);
-
-                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
-                    thisEnemy++;
-                    thisEnemy->setAngle(respInfo.spawnRotation);
-
-                    multiplier = 1.5;
-                    break;
-                case 4:
-                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
-                    thisEnemy = *enemies.begin();
-                    thisEnemy->setAngle(respInfo.spawnRotation);
-
-                    respInfo2 = getRespawnInfo(level * 200);
-
-                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
-                    thisEnemy++;
-                    thisEnemy->setAngle(respInfo.spawnRotation);
-
-                    multiplier = 2;
-                    break;
-
-                case 0:
-                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
-                    thisEnemy = *enemies.begin();
-                    thisEnemy->setAngle(respInfo.spawnRotation);
-
-                    respInfo2 = getRespawnInfo(level * 200);
-
-                    enemies.push_back(new Enemy(respInfo.spawnPos, &texDynamicObjects, *newEnemy));
-                    thisEnemy++;
-                    thisEnemy->setAngle(respInfo.spawnRotation);
-
-                    multiplier = 2;
-                    break;
-            }
-
-            for (it_enemies = enemies.begin(); it_enemies != enemies.end();
-                it_enemies++) {
-                (*it_enemies)->setHealth((double)thisEnemy->getHealth() *
-                    multiplier);
-                (*it_enemies)->setDamageValue((double)thisEnemy->getDamageValue() *
-                    multiplier);
-            }
-
+            createEnemies(enemies, texDynamicObjects, level);
         }
 
         while (window.pollEvent(event)) {
@@ -285,7 +193,7 @@ int Game::Run(sf::RenderWindow &window)
         player.draw(window);
         for (it_enemies = enemies.begin(); it_enemies != enemies.end(); it_enemies++) {
             Tank playerTank = player;
-            (*it_enemies)->update(time, playerTank, bullets, objects, anims);
+            (*it_enemies)->update(time, playerTank, bullets, objects, anims, enemies);
             (*it_enemies)->draw(window);
             // window.draw((*it_enemies)->bigSprite); // Потом удалить
         }
@@ -350,5 +258,90 @@ RespawnInfo Game::getRespawnInfo(int randomizer)
             inf.spawnRotation = -90;
             break;
     }
+    inf.corn = corn;
     return inf;
+}
+
+bool Game::isTheSameCorn(int a, int b)
+{
+    if (((a == 0) && (b == 1)) || ((a == 1) && (b == 0)) ||
+        ((a == 2) && (b == 3)) || ((a == 3) && (b == 2)) ||
+        ((a == 4) && (b == 5)) || ((a == 5) && (b == 4)) ||
+        ((a == 6) && (b == 7)) || ((a == 7) && (b == 6))) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void Game::createEnemies(std::list<Enemy*> &enemies, Texture &texDynObjs, int lvl)
+{
+    int count;
+    double multiplier;
+
+    RespawnInfo respInfo;
+    std::vector<int> prevCorns;
+
+    TankCharacteristic *newEnemy;
+
+    if (lvl <= 5) {
+        newEnemy = &germanyTiger2;
+    } else if (lvl <= 10) {
+        newEnemy = &germanyTiger2;
+    } else if (lvl <= 15) {
+        newEnemy = &germanyTiger2;
+    } else if (lvl <= 20) {
+        newEnemy = &germanyTiger2;
+    } else if (lvl <= 25) {
+        newEnemy = &germanyTiger2;
+    }
+
+    switch (lvl % 5) {
+        case 1:
+            count = 1;
+            multiplier = 1;
+            break;
+        case 2:
+            count = 2;
+            multiplier = 1;
+            break;
+        case 3:
+            count = 2;
+            multiplier = 1.5;
+            break;
+        case 4:
+            count = 3;
+            multiplier = 1.5;
+            break;
+        case 0:
+            count = 3;
+            multiplier = 2;
+            break;
+    }
+
+    for (int i = 0; i < count; ++i) {
+        bool isTheSame = true;
+        while (isTheSame) {
+            respInfo = getRespawnInfo(lvl * 100);
+            for (std::vector<int>::iterator it = prevCorns.begin();
+                it != prevCorns.end(); it++) {
+                if (*it == respInfo.corn) {
+                    isTheSame = true;
+                    break;
+                } else {
+                    isTheSame = false;
+                }
+            }
+            if (prevCorns.size() == 0) {
+                isTheSame = false;
+            }
+        }
+
+        enemies.push_back(new Enemy(respInfo.spawnPos, &texDynObjs, *newEnemy));
+        enemies.back()->setAngle(respInfo.spawnRotation);
+        enemies.back()->setHealth((double)(enemies.back()->getHealth()) *
+            multiplier);
+        enemies.back()->setDamageValue((double)(enemies.back()->getDamageValue()) *
+            multiplier);
+    }
 }

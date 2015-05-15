@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include <list>
+#include <vector>
 #include <iterator>
 #include "Player.h"
 #include "Enemy.h"
@@ -16,6 +17,7 @@
 
 // Хранит информацию о позиции появления врага
 struct RespawnInfo {
+    int corn;
     Vector2f spawnPos;
     double spawnRotation;
 };
@@ -30,6 +32,9 @@ public:
     int Run(sf::RenderWindow &window);
 
     static RespawnInfo getRespawnInfo(int randomizer);
+    static bool isTheSameCorn(int a, int b);
+    static void createEnemies(std::list<Enemy*> &enemies,
+        Texture &texDynObjs, int lvl);
 };
 
 #endif // !GAME_H

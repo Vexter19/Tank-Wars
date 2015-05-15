@@ -7,8 +7,9 @@ Map::Map(Texture &background, Texture &texObjects,
     this->background.setTexture(background);
     this->background.setPosition(0, 0);
     switch (lvl) {
-    case 0: objects.push_back(new GameObject(Vector2f(600, 600), texObjects, IntRect(0, 0, 128, 120)));
-        objects.push_back(new GameObject(Vector2f(1000, 1500), texObjects, IntRect(0, 0, 128, 120)));
+    case 0: objects.push_back(new GameObject(Vector2f(600, 600), texObjects, IntRect(0, 0, 68, 63)));
+        objects.push_back(new GameObject(Vector2f(1000, 1500), texObjects, IntRect(0, 0, 68, 63)));
+        objects.push_back(new GameObject(Vector2f(1000, 600), texObjects, IntRect(72, 0, 75, 164)));
     }
 }
 

@@ -47,7 +47,8 @@ public:
 
     Enemy(Vector2f pos, Texture *texDynObjs, TankCharacteristic tank);
     void update(double time, Tank &player, std::list<Bullet*> &bullets,
-        std::list<GameObject*> &objects, std::list<Animation*> &anims);
+        std::list<GameObject*> &objects, std::list<Animation*> &anims,
+        std::list<Enemy*> &enemies);
     
     void setAngle(double angle);
 

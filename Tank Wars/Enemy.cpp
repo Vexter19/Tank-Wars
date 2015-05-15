@@ -26,7 +26,8 @@ Enemy::Enemy(Vector2f pos, Texture *texDynObjs, TankCharacteristic tank) :
 }
 
 void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
-    std::list<GameObject*> &objects, std::list<Animation*> &anims)
+    std::list<GameObject*> &objects, std::list<Animation*> &anims,
+    std::list<Enemy*> &enemies)
 {
     Vector2f vecPlayer; // Вектор между врагом и игроком
     vecPlayer.x = player.getPos().x - position.x;
@@ -55,10 +56,8 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
                     // Случайно выбираем направление, в каком объезжать препятствие
                     if ((rand() % 2) == 0) {
                         randDir = -1;
-                        prevRandDir = randDir;
                     } else {
                         randDir = 1;
-                        prevRandDir = randDir;
                     }
 
                     // Сравниваем направление поворота с предыдущим.
@@ -66,6 +65,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
                     if (prevRandDir == randDir) {
                         randDir *= -1;
                     }
+                    prevRandDir = randDir;
 
                     double backupAngle = bigSprite.getRotation();
 
@@ -211,6 +211,17 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
 
     Tank::update(time, direction, rotation, objects, bullets, anims);
 
+    for (std::list<Enemy*>::iterator it = enemies.begin();
+        it != enemies.end(); ++it) {
+        GameObject *obj = *it;
+        if (*it != this) {
+            if (collisionLineRect((IntRect)(*it)->getSprite().getGlobalBounds(),
+                player.getPos())) {
+                Tank::update(time, -direction, -rotation, objects, bullets, anims);
+            }
+        }
+    }
+
     GameObject *objPlayer = &player;
     if (checkCollision(objPlayer) == true) {
         Tank::update(time, -direction, -rotation, objects, bullets, anims);
@@ -292,7 +303,7 @@ int Enemy::getHealth()
     return this->health;
 }
 
-void Enemy::setHealth(int helath)
+void Enemy::setHealth(int health)
 {
     this->health = health;
 }

@@ -119,7 +119,10 @@ void Tank::fire(std::list<Bullet*> &bullets, Texture &texBullet)
 {
     if (remainingTime == 0) {
         Vector2f gunVertex;
+        // Длина дула танка. Чтобы пуля вылетала не из самого танка
         double barrel = sprite.getTextureRect().width;
+
+        // Считаем координаты вершины орудия
         gunVertex.x = position.x + barrel * cos(dirTurrel * PI / 180);
         gunVertex.y = position.y + barrel * sin(dirTurrel * PI / 180);
         bullets.push_back(new Bullet(gunVertex, dirTurrel, &texBullet, IntRect(0, 0, 17, 5), this->damage));
