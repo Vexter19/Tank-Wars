@@ -84,9 +84,9 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameSurvival.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameTest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -107,9 +107,9 @@
     <ClInclude Include="Crosshair.h" />
     <ClInclude Include="cScreen.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameSurvival.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="GameTest.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />

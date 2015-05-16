@@ -25,7 +25,7 @@ int main()
     screens.push_back(&chooseModeMenu);
 
     // Создаём экран "Тестовый режим"
-    GameTest gameTest;
+    GameSurvival gameTest;
     screens.push_back(&gameTest);
 
     // Создаём экран "Режим выживания"

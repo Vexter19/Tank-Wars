@@ -78,12 +78,6 @@
     <ClCompile Include="TankCharacteristics.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Файлы исходного кода\Screens\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="GameSurvival.cpp">
-      <Filter>Файлы исходного кода\Screens\Game</Filter>
-    </ClCompile>
     <ClCompile Include="GameTest.cpp">
       <Filter>Файлы исходного кода\Screens\Game</Filter>
     </ClCompile>
@@ -98,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="MenuPause.cpp">
       <Filter>Файлы исходного кода\Screens\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSurvival.cpp">
+      <Filter>Файлы исходного кода\Screens\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Файлы исходного кода\Screens\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,12 +146,6 @@
     <ClInclude Include="TankCharacteristics.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Заголовочные файлы\Screens\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSurvival.h">
-      <Filter>Заголовочные файлы\Screens\Game</Filter>
-    </ClInclude>
     <ClInclude Include="GameTest.h">
       <Filter>Заголовочные файлы\Screens\Game</Filter>
     </ClInclude>
@@ -166,6 +160,12 @@
     </ClInclude>
     <ClInclude Include="MenuPause.h">
       <Filter>Заголовочные файлы\Screens\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSurvival.h">
+      <Filter>Заголовочные файлы\Screens\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Заголовочные файлы\Screens\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

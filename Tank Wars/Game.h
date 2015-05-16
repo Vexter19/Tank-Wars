@@ -1,5 +1,4 @@
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 #include <list>
 #include <vector>
 #include <iterator>
@@ -15,26 +14,16 @@
 #include <SFML/Graphics.hpp>
 #include "MenuPause.h"
 
-// Хранит информацию о позиции появления врага
-struct RespawnInfo {
-    int corn;
-    Vector2f spawnPos;
-    double spawnRotation;
-};
 
 class Game :
     public cScreen
 {
 public:
-    int level;
-    bool isInitialized;
     Game(void);
-    int run(sf::RenderWindow &window);
-
-    static RespawnInfo getRespawnInfo(int randomizer);
-    static bool isTheSameCorn(int a, int b);
-    static void createEnemies(std::list<Enemy*> &enemies,
-        Texture &texDynObjs, int lvl);
+    int run(Event &event, Clock &clock, Texture &texDynamicObjects,
+        Map &map, Player &player, Crosshair &crosshair, 
+        std::list<Enemy*> &enemies, std::list<Bullet*> &bullets,
+        std::list<GameObject*> &objects, std::list<Animation*> &anims,
+        short int direction, short int rotation, RenderWindow &window);
 };
 
-#endif // !GAME_H
