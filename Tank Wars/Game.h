@@ -13,7 +13,7 @@
 #include <iostream>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics.hpp>
-#include "Screens.h"
+#include "MenuPause.h"
 
 // Хранит информацию о позиции появления врага
 struct RespawnInfo {
@@ -29,7 +29,7 @@ public:
     int level;
     bool isInitialized;
     Game(void);
-    int Run(sf::RenderWindow &window);
+    int run(sf::RenderWindow &window);
 
     static RespawnInfo getRespawnInfo(int randomizer);
     static bool isTheSameCorn(int a, int b);

@@ -17,6 +17,8 @@ const double PI = 3.14159265;
 class Tank :
     public GameObject
 {
+private:
+    Vector2f backupPos;
 protected:
     //Tank
     Texture texTurrel;

@@ -1,12 +1,12 @@
 #include "Game.h"
 
 
-Game::Game(void)
+Game::Game()
 {
     isInitialized = false;
 }
 
-int Game::Run(sf::RenderWindow &window)
+int Game::run(sf::RenderWindow &window)
 {
     Event event;
 
@@ -35,7 +35,7 @@ int Game::Run(sf::RenderWindow &window)
 
     Map map(texMap, texMapObjects, objects, 0);
 
-    Player player(Vector2f(200, 200), germanyPZIV);
+    Player player(Vector2f(200, 200), germanyPz1C);
 
     Crosshair crosshair(Vector2f(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), texGUI, IntRect(0, 0, 24, 24));
 
@@ -84,10 +84,13 @@ int Game::Run(sf::RenderWindow &window)
             point.value = -1;
             menuPoints.push_back(point);
 
-            Menu pauseMenu(menuPoints);
-            switch (pauseMenu.Run(window)) {
+            MenuPause pauseMenu;
+            switch (pauseMenu.run(window)) {
                 case 1:
                     continue;
+                    break;
+                case 0:
+                    return 0;
                     break;
                 case -1:
                     return -1;
@@ -146,7 +149,7 @@ int Game::Run(sf::RenderWindow &window)
         time = time / 1000;
         clock.restart();
 
-        getViewCoords(player.getPos().x, player.getPos().y);
+        view = getViewCoords(player.getPos().x, player.getPos().y);
 
         for (it_bullets = bullets.begin(); it_bullets != bullets.end();) {
             Bullet* b = *it_bullets;

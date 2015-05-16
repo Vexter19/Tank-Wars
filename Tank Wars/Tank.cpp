@@ -33,7 +33,14 @@ void Tank::update(double time, short int direction, short int rotation,
         life = false;
     }
     if (life == true) {
-        Vector2f backupPos = position;
+        if (direction == 1) {
+            backupPos.x = position.x - SPEED_OF_RETURNING * cos(angle * PI / 180);
+            backupPos.y = position.y - SPEED_OF_RETURNING * sin(angle * PI / 180);
+        } else if (direction == -1) {
+            backupPos.x = position.x + SPEED_OF_RETURNING * cos(angle * PI / 180);
+            backupPos.y = position.y + SPEED_OF_RETURNING * sin(angle * PI / 180);
+        }
+
 
         angle += speedOfRotation * rotation * time / 1000;
         speed = (direction > 0) ? (maxSpeed * direction) : (maxSpeed * direction / 2);
@@ -70,7 +77,7 @@ void Tank::update(double time, short int direction, short int rotation,
             it != objects.end(); ++it) {
             GameObject *obj = *it;
             if (checkCollision(obj) == true) {
-                backToPrevPos(direction, rotation, backupPos);
+                position = backupPos;
                 if (rotation == 1) {
                     angle -= 1;
                 } else if (rotation == -1) {
@@ -82,7 +89,7 @@ void Tank::update(double time, short int direction, short int rotation,
         // Обрабатываем выход за границы карты
         if (position.x >= mapWidth || position.x < 0 ||
             position.y >= mapHeight || position.y < 0) {
-            backToPrevPos(direction, rotation, backupPos);
+            position = backupPos;
         }
 
         sprite.setPosition(position.x, position.y);
@@ -164,6 +171,7 @@ bool Tank::isAlive()
 
 void Tank::backToPrevPos(int direction, int rotation, Vector2f backupPos)
 {
+    //
     if (direction == 1) {
         position.x = backupPos.x -
             SPEED_OF_RETURNING * cos(angle * PI / 180);

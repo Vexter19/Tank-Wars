@@ -23,7 +23,7 @@ IntRect(0, 0, 129, 60), IntRect(0, 61, 138, 55),
 
 TankCharacteristic germanyPz1C = { "Pz-1C", "images/PZ-1C.png",
 IntRect(0, 0, 98, 46), IntRect(0, 49, 54, 32),
-18, 3, 70, 40, 50, 1, 10, 100 };
+18, 3, 70, 100, 50, 1, 10, 100 };
 
 TankCharacteristic germanyPZIV = { "PZ IV", "images/PZIV.png",
 IntRect(0, 0, 110, 59), IntRect(0, 60, 123, 53),

@@ -25,6 +25,18 @@
     <Filter Include="Файлы исходного кода\GameObjects">
       <UniqueIdentifier>{764815ac-0553-4fd0-b5b9-553ab721304c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\Screens\Game">
+      <UniqueIdentifier>{dbda1c4d-3b84-47a2-9c5e-3e0123c9547f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\Screens\Menu">
+      <UniqueIdentifier>{e4171056-5f77-41b4-9041-173b1a9d0cde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Screens\Game">
+      <UniqueIdentifier>{e7c79fa2-ac9f-499d-8962-cf84cda8511f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\Screens\Menu">
+      <UniqueIdentifier>{a076c861-9f4d-44b7-a377-12a787af0a76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -38,12 +50,6 @@
     </ClCompile>
     <ClCompile Include="View.cpp">
       <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Файлы исходного кода\Screens</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Файлы исходного кода\Screens</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>Файлы исходного кода\GameObjects</Filter>
@@ -72,6 +78,27 @@
     <ClCompile Include="TankCharacteristics.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Файлы исходного кода\Screens\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSurvival.cpp">
+      <Filter>Файлы исходного кода\Screens\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTest.cpp">
+      <Filter>Файлы исходного кода\Screens\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Файлы исходного кода\Screens\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuChooseMode.cpp">
+      <Filter>Файлы исходного кода\Screens\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuMain.cpp">
+      <Filter>Файлы исходного кода\Screens\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuPause.cpp">
+      <Filter>Файлы исходного кода\Screens\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="View.h">
@@ -83,16 +110,10 @@
     <ClInclude Include="Animation.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Заголовочные файлы\Screens</Filter>
-    </ClInclude>
     <ClInclude Include="cScreen.h">
       <Filter>Заголовочные файлы\Screens</Filter>
     </ClInclude>
     <ClInclude Include="Screens.h">
-      <Filter>Заголовочные файлы\Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
       <Filter>Заголовочные файлы\Screens</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
@@ -124,6 +145,27 @@
     </ClInclude>
     <ClInclude Include="TankCharacteristics.h">
       <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Заголовочные файлы\Screens\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSurvival.h">
+      <Filter>Заголовочные файлы\Screens\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTest.h">
+      <Filter>Заголовочные файлы\Screens\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Заголовочные файлы\Screens\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuChooseMode.h">
+      <Filter>Заголовочные файлы\Screens\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuMain.h">
+      <Filter>Заголовочные файлы\Screens\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuPause.h">
+      <Filter>Заголовочные файлы\Screens\Menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

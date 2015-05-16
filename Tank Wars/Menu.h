@@ -13,6 +13,8 @@
 struct MenuPoint {
     Text text;
     int value;
+    Vector2f pos;
+    bool isActive;
 };
 
 class Menu :
@@ -24,8 +26,8 @@ private:
     bool playing;
     std::vector<MenuPoint> menuPoints;
 public:
-    Menu(std::vector<MenuPoint> menuPoints);
-    int Run(sf::RenderWindow &window);
+    Menu();
+    int run(sf::RenderWindow &window, std::vector<MenuPoint> menuPoints);
 };
 
 #endif // !MENU_H

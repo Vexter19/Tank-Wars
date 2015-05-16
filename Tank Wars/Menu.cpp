@@ -3,15 +3,14 @@
 
 using namespace sf;
 
-Menu::Menu(std::vector<MenuPoint> menuPoints)
+Menu::Menu()
 {
-    this->menuPoints = menuPoints;
     alpha_max = 3 * 255;
     alpha_div = 3;
     playing = false;
 }
 
-int Menu::Run(RenderWindow &window)
+int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
 {
     int alpha = 0;
 
@@ -36,30 +35,17 @@ int Menu::Run(RenderWindow &window)
     Font font;
     font.loadFromFile("calibrib.ttf");
   
-    int menu = MENU_NULL;
+    int choise = MENU_NULL;
 
     MouseCursor mouse(Vector2f(0, 0), texGUI, IntRect(30, 0, 20, 20));
 
-    //view.reset(FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT));
-
     Vector2u windowSize;
     windowSize = window.getSize();
-    Vector2i windowCenter;
-    windowCenter.x = window.getSize().x / 2;
-    windowCenter.y = window.getSize().y / 2;
-
-    int countOfPoints = menuPoints.size();
-    int interval = windowSize.y / countOfPoints;
-    int i = 1;
-    int firstPointCoordY = (view.getCenter().y
-        - countOfPoints * MENU_POINT_SIZE) - 50;
 
     for (std::vector<MenuPoint>::iterator it = menuPoints.begin(); it != menuPoints.end(); it++)  {
         (*it).text.setFont(font);
         (*it).text.setCharacterSize(MENU_POINT_SIZE);
-        (*it).text.setPosition(view.getCenter().x - 100,
-            firstPointCoordY + i * (MENU_POINT_SIZE + 30));
-        i++;
+        (*it).text.setPosition((*it).pos.x + menuPos.x, (*it).pos.y + menuPos.y);
     }
 
     if (playing) {
@@ -75,20 +61,19 @@ int Menu::Run(RenderWindow &window)
 
         if (event.type == Event::MouseButtonPressed &&
             event.key.code == Mouse::Left) {
-            if (menu != MENU_NULL) {
-                return menu;
+            if (choise != MENU_NULL) {
+                return choise;
             }
         }
-        Vector2f a;
 
         for (std::vector<MenuPoint>::iterator it = menuPoints.begin();
             it != menuPoints.end(); it++) {
             (*it).text.setColor(Color(255, 255, 255, 255));
-            menu = MENU_NULL;
+            choise = MENU_NULL;
             if (mouse.getSprite().getGlobalBounds().intersects(
-                (*it).text.getGlobalBounds()))
+                (*it).text.getGlobalBounds()) && (*it).isActive)
             {
-                menu = (*it).value;
+                choise = (*it).value;
                 (*it).text.setColor(Color(255, 0, 0, 255));
                 break;
             }
