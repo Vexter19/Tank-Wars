@@ -38,3 +38,8 @@ double Player::getReaminingTime()
 {
     return remainingTime;
 }
+
+int Player::getHealth()
+{
+    return health;
+}

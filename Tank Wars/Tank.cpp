@@ -4,7 +4,7 @@
 Tank::Tank(Vector2f pos, std::string texPath, IntRect rect, IntRect rectTurrel,
     int turrelCenterX, int diffTankTurrel, double maxSpeed,
     double speedOfRotation, double speedTurrel,
-    double rechargeTime, int damage, std::string name, int health) :
+    double rechargeTime, int damage, std::wstring name, int health) :
     GameObject(pos, texPath, rect)
 {
     dirTurrel = 0;
@@ -15,8 +15,9 @@ Tank::Tank(Vector2f pos, std::string texPath, IntRect rect, IntRect rectTurrel,
     this->rechargeTime = rechargeTime;
     this->damage = damage;
     this->name = name;
+    this->maxHealth = health;
     this->health = health;
-    remainingTime = rechargeTime;
+    this->remainingTime = rechargeTime;
     this->life = true;
 
     texTurrel.loadFromFile(texPath);
@@ -137,7 +138,7 @@ void Tank::fire(std::list<Bullet*> &bullets, Texture &texBullet)
     }
 }
 
-std::string Tank::getTankInfo()
+std::wstring Tank::getTankInfo()
 {
     std::string strHealth;
     strHealth = numToStr(health);
@@ -148,6 +149,11 @@ std::string Tank::getTankInfo()
     }
 }
 
+std::wstring Tank::getTankName()
+{
+    return name;
+}
+
 int Tank::getDamageOfBullet()
 {
     return damage;
@@ -155,13 +161,7 @@ int Tank::getDamageOfBullet()
 
 void Tank::getDamage(int damage)
 {
-    srand(time(0));
-
-    // Рандомизация урона.
-    double diff = damage * ((rand() % 20) - 10) / 100;
-
-    int realDamage = damage + (int)diff;
-    this->health -= realDamage;
+    this->health -= damage;
 }
 
 bool Tank::isAlive()

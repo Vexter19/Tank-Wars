@@ -9,10 +9,13 @@ class Player :
 {
 public:
     Player(Vector2f pos, TankCharacteristic tank);
+
     void update(double time, short int direction, short int rotation,
         std::list<GameObject*> &objects, std::list<Enemy*> &enemies,
         std::list<Bullet*> &bullets, std::list<Animation*> &anims);
+
     double getReaminingTime();
+    int getHealth();
 };
 
 #endif // !PLAYER_H

@@ -37,6 +37,12 @@
     <Filter Include="Файлы исходного кода\Screens\Menu">
       <UniqueIdentifier>{a076c861-9f4d-44b7-a377-12a787af0a76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\GameObjects\GUI">
+      <UniqueIdentifier>{21f5a3aa-ec89-4693-8204-9d54645eed26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы исходного кода\GameObjects\GUI">
+      <UniqueIdentifier>{2b257f80-4eae-40e2-bf7b-d5744a9adcf7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -52,9 +58,6 @@
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
-      <Filter>Файлы исходного кода\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Crosshair.cpp">
       <Filter>Файлы исходного кода\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
@@ -99,6 +102,12 @@
     <ClCompile Include="Game.cpp">
       <Filter>Файлы исходного кода\Screens\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Crosshair.cpp">
+      <Filter>Файлы исходного кода\GameObjects\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TankInfo.cpp">
+      <Filter>Файлы исходного кода\GameObjects\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="View.h">
@@ -134,9 +143,6 @@
     <ClInclude Include="Bullet.h">
       <Filter>Заголовочные файлы\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Crosshair.h">
-      <Filter>Заголовочные файлы\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="MouseCursor.h">
       <Filter>Заголовочные файлы\GameObjects</Filter>
     </ClInclude>
@@ -166,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>Заголовочные файлы\Screens\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Crosshair.h">
+      <Filter>Заголовочные файлы\GameObjects\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TankInfo.h">
+      <Filter>Заголовочные файлы\GameObjects\GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

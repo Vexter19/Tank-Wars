@@ -6,7 +6,7 @@ Game::Game(void)
 }
 
 int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
-    Map &map, Player &player, Crosshair &crosshair,
+    Map &map, Player &player, Crosshair &crosshair, TankInfo &tankInfo,
     std::list<Enemy*> &enemies, std::list<Bullet*> &bullets,
     std::list<GameObject*> &objects, std::list<Animation*> &anims,
     short int direction, short int rotation, RenderWindow &window)
@@ -42,7 +42,6 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
                 return -1;
                 break;
         }
-
     }
 
     direction = 0;
@@ -168,10 +167,11 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
         (*it_anims)->draw(window);
     }
 
-
-
     crosshair.update((Vector2f)mousePos, enemies, player);
     crosshair.draw(window);
+
+    tankInfo.update(player);
+    tankInfo.draw(window);
 
     window.display();
     return MENU_NULL;

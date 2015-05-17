@@ -1,5 +1,5 @@
 #include "Crosshair.h"
-
+#include <string>
 
 Crosshair::Crosshair(Vector2f pos, Texture &tex, IntRect rect) :
 GameObject(pos, tex, rect)
@@ -38,7 +38,7 @@ void Crosshair::update(Vector2f pos, std::list<Enemy*> &enemies, Player &player)
     if (checkCollision(obj) == true) {
         sprite.setColor(Color::Blue);
 
-        std::string temp = player.getTankInfo();
+        std::wstring temp = player.getTankInfo();
         tankInfo.setString(player.getTankInfo());
         tankInfo.setColor(Color::Blue);
     }

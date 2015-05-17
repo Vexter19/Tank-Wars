@@ -30,7 +30,7 @@ protected:
     double remainingTime; // Оставшееся время до конца перезарядки танка.
     int health;
     int damage;
-    std::string name;
+    std::wstring name;
     bool life;
 
     void backToPrevPos(int direction, int rotation, Vector2f backupPos);
@@ -42,10 +42,12 @@ protected:
     Sprite spriteTurrel;
 public:
     //Tank
+    int maxHealth;
+
     Tank(Vector2f pos, std::string texPath, IntRect rect, IntRect rectTurrel,
         int turrelCenterX, int diffTankTurrel, double maxSpeed,
         double speedOfRotation, double speedTurrel,
-        double rechargeTime, int damage, std::string name, int health);
+        double rechargeTime, int damage, std::wstring name, int health);
 
     void update(double time, short int direction, short int rotation,
         std::list<GameObject*> &objects, std::list<Bullet*> &bullets,
@@ -55,10 +57,10 @@ public:
     void fire(std::list<Bullet*> &bullets, Texture &texBullet);
     void getDamage(int damage);
 
-    std::string getTankInfo();
+    std::wstring getTankName();
+    std::wstring getTankInfo();
     int getDamageOfBullet();
 
-    void setLife();
     bool isAlive();
 
     //Turrel 
