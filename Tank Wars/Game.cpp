@@ -65,6 +65,11 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
         player.fire(bullets, texDynamicObjects);
     }
 
+    if (event.type == Event::MouseButtonPressed &&
+        event.key.code == Mouse::Right) {
+        enemies.clear();
+    }
+
     // Зум. Работает косячно.
     /*if (event.type == Event::MouseWheelMoved) {
     Vector2f backupView = view.getSize();

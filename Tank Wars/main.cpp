@@ -4,7 +4,7 @@
 
 int main()
 {
-    RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Wars");// , Style::Fullscreen);
+    RenderWindow window(VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tank Wars", Style::Fullscreen);
     window.setMouseCursorVisible(false);
 
     view.setCenter(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);

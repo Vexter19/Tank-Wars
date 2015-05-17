@@ -7,7 +7,7 @@
 #define VISIBILITY 700
 #define COS_10 0.98
 #define COS_30 0.86
-#define TRY_ROTATE_ANGLE 45
+#define TRY_ROTATE_ANGLE 60
 #define GO_DISTANCE 15
 #define RAND_STOP_TIME 7
 

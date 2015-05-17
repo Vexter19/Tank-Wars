@@ -5,7 +5,7 @@
 #include "View.h"
 #include "TankCharacteristics.h"
 
-#define SPEED_OF_RETURNING 0.1
+#define SPEED_OF_RETURNING 1
 
 extern const double mapWidth;
 extern const double mapHeight;

@@ -17,17 +17,19 @@ void Player::update(double time, short int direction, short int rotation,
     std::list<GameObject*> &objects, std::list<Enemy*> &enemies,
     std::list<Bullet*> &bullets, std::list<Animation*> &anims)
 {
-    // Убираем инверсию заднего хода.
-    if (direction == -1) {
-        rotation *= -1;
-    }
+    if (this->isAlive() == true) {
+        // Убираем инверсию заднего хода.
+        if (direction == -1) {
+            rotation *= -1;
+        }
 
-    Tank::update(time, direction, rotation, objects, bullets, anims);
+        Tank::update(time, direction, rotation, objects, bullets, anims);
 
-    for (std::list<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
-        GameObject *obj = *it;
-        while (checkCollision(obj) == true) {
-            Tank::update(time, -direction, -rotation, objects, bullets, anims);
+        for (std::list<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
+            GameObject *obj = *it;
+            while (checkCollision(obj) == true) {
+                Tank::update(time, -direction, -rotation, objects, bullets, anims);
+            }
         }
     }
 }
