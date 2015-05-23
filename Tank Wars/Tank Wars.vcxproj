@@ -96,6 +96,7 @@
     <ClCompile Include="MenuPause.cpp" />
     <ClCompile Include="MouseCursor.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RepairPoint.cpp" />
     <ClCompile Include="Tank.cpp" />
     <ClCompile Include="TankCharacteristics.cpp" />
     <ClCompile Include="TankInfo.cpp" />
@@ -119,6 +120,7 @@
     <ClInclude Include="MenuPause.h" />
     <ClInclude Include="MouseCursor.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RepairPoint.h" />
     <ClInclude Include="Screens.h" />
     <ClInclude Include="Tank.h" />
     <ClInclude Include="TankCharacteristics.h" />

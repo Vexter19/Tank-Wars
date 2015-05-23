@@ -14,6 +14,9 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics.hpp>
 #include "MenuPause.h"
+#include "RepairPoint.h"
+
+#define MIN_REPAIR_INTERVAL 30.0
 
 
 class Game :
@@ -25,6 +28,7 @@ public:
         Map &map, Player &player, Crosshair &crosshair,  TankInfo &tankInfo,
         std::list<Enemy*> &enemies, std::list<Bullet*> &bullets,
         std::list<GameObject*> &objects, std::list<Animation*> &anims,
+        std::list<RepairPoint*> &repairPoints, float &timeBeforeRepairing,
         short int direction, short int rotation, RenderWindow &window);
 };
 

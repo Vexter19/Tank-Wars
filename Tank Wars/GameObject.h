@@ -29,6 +29,7 @@ protected:
     double speed;
     double angle;
     bool checkCollision(GameObject *obj);
+
 public:
     GameObject(Vector2f pos, Texture &tex, IntRect rect);
     GameObject(Vector2f pos, std::string texPath, IntRect rect);

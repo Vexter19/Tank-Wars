@@ -9,6 +9,7 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
     Map &map, Player &player, Crosshair &crosshair, TankInfo &tankInfo,
     std::list<Enemy*> &enemies, std::list<Bullet*> &bullets,
     std::list<GameObject*> &objects, std::list<Animation*> &anims,
+    std::list<RepairPoint*> &repairPoints, float &timeBeforeRepairing,
     short int direction, short int rotation, RenderWindow &window)
 {
     Vector2u windowSize;
@@ -71,33 +72,40 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
 
     // Зум. Работает косячно.
     if (event.type == Event::MouseWheelMoved) {
-    Vector2f backupView = view.getSize();
-    std::cout << backupView.x << "  " << backupView.y << std::endl;
-    FloatRect newView;
-    newView.left = 0;
-    newView.top = 0;
+        Vector2f backupView = view.getSize();
+        std::cout << backupView.x << "  " << backupView.y << std::endl;
+        FloatRect newView;
+        newView.left = 0;
+        newView.top = 0;
 
-    if (event.mouseWheel.delta < 0) {
-    if (backupView.x < 1920 && backupView.y < 1080) {
-    newView.width = backupView.x * 1.1;
-    newView.height = backupView.y * 1.1;
-    view.reset(newView);
-    }
-    }
-    if (event.mouseWheel.delta > 0) {
-    if (backupView.x > 960 && backupView.y > 540) {
-    newView.width = backupView.x / 1.1;
-    newView.height = backupView.y / 1.1;
-    view.reset(newView);
-    }
-    }
-    event.mouseWheel.delta = 0;
+        if (event.mouseWheel.delta < 0) {
+            if (backupView.x < 1920 && backupView.y < 1080) {
+                newView.width = backupView.x * 1.1;
+                newView.height = backupView.y * 1.1;
+                view.reset(newView);
+            }
+        }
+        if (event.mouseWheel.delta > 0) {
+            if (backupView.x > 960 && backupView.y > 540) {
+                newView.width = backupView.x / 1.1;
+                newView.height = backupView.y / 1.1;
+                view.reset(newView);
+            }
+        }
+        event.mouseWheel.delta = 0;
     }
 
 
     double time = (double)clock.getElapsedTime().asMicroseconds();
     time = time / 1000;
     clock.restart();
+
+    timeBeforeRepairing -= time / 1000;
+    if (timeBeforeRepairing < 0) {
+        timeBeforeRepairing = 0;
+    }
+
+    
 
     view = getViewCoords(player.getPos().x, player.getPos().y);
 
@@ -146,6 +154,31 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
     window.clear();
 
     map.draw(window, objects);
+
+    for (std::list<RepairPoint*>::iterator it_repairs = repairPoints.begin();
+        it_repairs != repairPoints.end();) {
+        RepairPoint *rep = *it_repairs;
+
+        if ((*it_repairs)->isAlive() == false) {
+            it_repairs = repairPoints.erase(it_repairs);
+            delete rep;
+        } else {
+            it_repairs++;
+        }
+    }
+
+    for (std::list<RepairPoint*>::iterator it_repairs = repairPoints.begin();
+        it_repairs != repairPoints.end(); it_repairs++) {
+        bool isRepaired = (*it_repairs)->repair(player, time);
+        (*it_repairs)->draw(window);
+        if (isRepaired == true) {
+            timeBeforeRepairing = MIN_REPAIR_INTERVAL;
+        }
+    }
+
+    std::cout << timeBeforeRepairing << "   " << time << "  " << repairPoints.size() << std::endl;  
+   
+
     player.draw(window);
     for (std::list<Enemy*>::iterator it_enemies = enemies.begin();
         it_enemies != enemies.end(); it_enemies++) {
@@ -173,6 +206,5 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
     tankInfo.update(player);
     tankInfo.draw(window);
 
-    window.display();
     return MENU_NULL;
 }

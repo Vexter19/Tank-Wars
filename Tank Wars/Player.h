@@ -16,6 +16,7 @@ public:
 
     double getReaminingTime();
     int getHealth();
+    void setHealth(int health);
 };
 
 #endif // !PLAYER_H

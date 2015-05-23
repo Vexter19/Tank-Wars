@@ -16,28 +16,36 @@ class Enemy :
 {
 private:
     Texture *texDynamicObjects;
+
     // Индикатор тревоги
     bool alert;
+
     // Расстояние, которое враг едет, будучи в спокойном состоянии
     double distance;
+
     // Расстояние, которое враг проехал, до того, как он захочет постоять
     double travelled;
+
     // Сохраняем направление, по которому врагу не получилось проехать, чтобы
     // не ехать так же ещё раз
     int prevRandDir;
+
     // Время, которое враг стоит на месте
     double stopTimeGone;
     double stopTime;
+
     // Точка, в которую враг будет вращать башню во время остановки
     Vector2f calmRotateTo1;
     Vector2f calmRotateTo2;
     double calmRotateAngle1;
     double calmRotateAngle2;
+
     // Хранит информацию о том, сколько раз враг уже вращал башней
     int rotated;
 
     bool isOutOfMap();
     bool collisionLineRect(IntRect rect, Vector2f playerPos);
+
     // Алгоритм Коэна-Сазерленда для определения пересечения
     // отрезка и прямоугольника
     int getCode(IntRect rect, Vector2f point);

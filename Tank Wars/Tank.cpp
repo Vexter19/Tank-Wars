@@ -73,7 +73,7 @@ void Tank::update(double time, short int direction, short int rotation,
         }
 
         // Обрабатываем выход за границы карты
-        while (position.x >= mapWidth || position.x < 0 ||
+        if (position.x >= mapWidth || position.x < 0 ||
             position.y >= mapHeight || position.y < 0) {
             backToPrevPos(direction, backupPos);
         }

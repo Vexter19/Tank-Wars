@@ -108,6 +108,9 @@
     <ClCompile Include="TankInfo.cpp">
       <Filter>Файлы исходного кода\GameObjects\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="RepairPoint.cpp">
+      <Filter>Файлы исходного кода\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="View.h">
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="TankInfo.h">
       <Filter>Заголовочные файлы\GameObjects\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="RepairPoint.h">
+      <Filter>Заголовочные файлы\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
