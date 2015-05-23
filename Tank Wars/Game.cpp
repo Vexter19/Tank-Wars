@@ -70,7 +70,7 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
     }
 
     // Зум. Работает косячно.
-    /*if (event.type == Event::MouseWheelMoved) {
+    if (event.type == Event::MouseWheelMoved) {
     Vector2f backupView = view.getSize();
     std::cout << backupView.x << "  " << backupView.y << std::endl;
     FloatRect newView;
@@ -92,7 +92,7 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
     }
     }
     event.mouseWheel.delta = 0;
-    }*/
+    }
 
 
     double time = (double)clock.getElapsedTime().asMicroseconds();

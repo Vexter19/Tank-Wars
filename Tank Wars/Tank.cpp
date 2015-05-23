@@ -1,4 +1,5 @@
 #include "Tank.h"
+#include <iostream>
 
 
 Tank::Tank(Vector2f pos, std::string texPath, IntRect rect, IntRect rectTurrel,
@@ -34,15 +35,6 @@ void Tank::update(double time, short int direction, short int rotation,
         life = false;
     }
     if (life == true) {
-        if (direction == 1) {
-            backupPos.x = position.x - SPEED_OF_RETURNING * cos(angle * PI / 180);
-            backupPos.y = position.y - SPEED_OF_RETURNING * sin(angle * PI / 180);
-        } else if (direction == -1) {
-            backupPos.x = position.x + SPEED_OF_RETURNING * cos(angle * PI / 180);
-            backupPos.y = position.y + SPEED_OF_RETURNING * sin(angle * PI / 180);
-        }
-
-
         angle += speedOfRotation * rotation * time / 1000;
         speed = (direction > 0) ? (maxSpeed * direction) : (maxSpeed * direction / 2);
 
@@ -60,9 +52,7 @@ void Tank::update(double time, short int direction, short int rotation,
             remainingTime = 0;
         }
 
-        // —читаем координаты центра башни.
-        double xTur = position.x + diffTankTurrel * cos(angle * PI / 180);
-        double yTur = position.y + diffTankTurrel * sin(angle * PI / 180);
+        
 
         // ќбрабатываем столкновени€ с пул€ми...
         for (std::list<Bullet*>::iterator it = bullets.begin(); it != bullets.end(); ++it) {
@@ -77,21 +67,20 @@ void Tank::update(double time, short int direction, short int rotation,
         for (std::list<GameObject*>::iterator it = objects.begin();
             it != objects.end(); ++it) {
             GameObject *obj = *it;
-            if (checkCollision(obj) == true) {
-                position = backupPos;
-                if (rotation == 1) {
-                    angle -= 1;
-                } else if (rotation == -1) {
-                    angle += 1;
-                }
+            while (checkCollision(obj) == true) {
+                backToPrevPos(direction, backupPos);
             }
         }
 
         // ќбрабатываем выход за границы карты
-        if (position.x >= mapWidth || position.x < 0 ||
+        while (position.x >= mapWidth || position.x < 0 ||
             position.y >= mapHeight || position.y < 0) {
-            position = backupPos;
+            backToPrevPos(direction, backupPos);
         }
+
+        // —читаем координаты центра башни.
+        double xTur = position.x + diffTankTurrel * cos(angle * PI / 180);
+        double yTur = position.y + diffTankTurrel * sin(angle * PI / 180);
 
         sprite.setPosition(position.x, position.y);
         spriteTurrel.setPosition(xTur, yTur);
@@ -169,19 +158,26 @@ bool Tank::isAlive()
     return life;
 }
 
-void Tank::backToPrevPos(int direction, int rotation, Vector2f backupPos)
+void Tank::backToPrevPos(int direction, Vector2f backupPos)
 {
-    //
-    if (direction == 1) {
-        position.x = backupPos.x -
-            SPEED_OF_RETURNING * cos(angle * PI / 180);
-        position.y = backupPos.y -
-            SPEED_OF_RETURNING * sin(angle * PI / 180);
-    } else if (direction == -1) {
-        position.x = backupPos.x +
-            SPEED_OF_RETURNING * cos(angle * PI / 180);
-        position.y = backupPos.y +
-            SPEED_OF_RETURNING * sin(angle * PI / 180);
+    
+    if (direction == 0) {
+        dx = cos(angle * PI / 180);
+        dy = sin(angle * PI / 180);
+        if (prevDir == -1) {
+            dx *= -1;
+            dy *= -1;
+        }
+    }
+    
+    position.x = position.x - dx * MULTIPLIER;
+    position.y = position.y - dy * MULTIPLIER;
+    sprite.setPosition(position.x - dx, position.y - dy);
+    spriteTurrel.setPosition(position.x - dx, position.y - dy);
+
+    if (direction != 0) {
+        prevDir = direction;
+        
     }
 }
 

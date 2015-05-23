@@ -5,7 +5,8 @@
 #include "View.h"
 #include "TankCharacteristics.h"
 
-#define SPEED_OF_RETURNING 1
+#define SPEED_OF_RETURNING 10
+#define MULTIPLIER 0.01
 
 extern const double mapWidth;
 extern const double mapHeight;
@@ -19,6 +20,7 @@ class Tank :
 {
 private:
     Vector2f backupPos;
+    int prevDir;
 protected:
     //Tank
     Texture texTurrel;
@@ -33,7 +35,7 @@ protected:
     std::wstring name;
     bool life;
 
-    void backToPrevPos(int direction, int rotation, Vector2f backupPos);
+    void backToPrevPos(int direction, Vector2f backupPos);
     int rotate(Vector2f point, double &dir);
 
     //Turrel
