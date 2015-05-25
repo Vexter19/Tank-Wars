@@ -5,6 +5,7 @@ using namespace sf;
 struct TankCharacteristic
 {
     std::wstring name; // Название танка
+    int level;
     std::string texturePath; // Путь к текстуре
     IntRect texRectBody; // Прямоугольник текстуры корпуса
     IntRect texRectTurrel; // Прямоугольник текстуры башни

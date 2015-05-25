@@ -7,11 +7,9 @@ Player::Player(Vector2f pos, TankCharacteristic tank) :
     tank.speedOfRotation, tank.speedTurrel, tank.rechargeTime, tank.damage,
     tank.name, tank.health)
 {
-    
-    this->health = health;
+    this->level = tank.level;
+    this->health = tank.health;
 }
-
-
 
 void Player::update(double time, short int direction, short int rotation,
     std::list<GameObject*> &objects, std::list<Enemy*> &enemies,
@@ -28,7 +26,8 @@ void Player::update(double time, short int direction, short int rotation,
         for (std::list<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
             GameObject *obj = *it;
             while (checkCollision(obj) == true) {
-                Tank::update(time, -direction, -rotation, objects, bullets, anims);
+                backToPrevPos(direction, rotation, 0.01);
+                //Tank::update(time, -direction, -rotation, objects, bullets, anims);
             }
         }
     }
@@ -47,4 +46,9 @@ int Player::getHealth()
 void Player::setHealth(int health)
 {
     this->health = health;
+}
+
+int Player::getLevel()
+{
+    return level;
 }

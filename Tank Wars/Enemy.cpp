@@ -37,6 +37,18 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
     } else {
         alert = false;
     }
+
+    bool willCollidedWithEnemy = false;
+    for (std::list<Enemy*>::iterator it = enemies.begin();
+        it != enemies.end(); ++it) {
+        GameObject *obj = *it;
+        if (*it != this) {
+            if (checkCollision(obj)) {
+                willCollidedWithEnemy = true;
+            }
+        }
+    }
+
     if (alert == false) { // Если враг не видит игрока
         // TODO поворачиваем на случайный угол
         // пока не проехали нужное расстояние
@@ -48,8 +60,8 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
 
                 GameObject *obj = *it;
                 if (Collision::BoundingBoxTest(bigSprite, obj->getSprite()) ||
-                    isOutOfMap()) {
-                    // Если на пути есть объект или скоро конец карты...
+                    isOutOfMap() || willCollidedWithEnemy) {
+                    // Если на пути есть объект или враг или скоро конец карты...
                     srand(time);
                     int randDir;
                     
@@ -150,7 +162,8 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
             it != objects.end(); ++it) {
 
             GameObject *obj = *it;
-            if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())) {
+            if (Collision::BoundingBoxTest(bigSprite, obj->getSprite()) ||
+                willCollidedWithEnemy || isOutOfMap()) {
                 // Если на пути есть объект
                 double backupAngle = bigSprite.getRotation();
                 bigSprite.setRotation(backupAngle + TRY_ROTATE_ANGLE);
@@ -205,7 +218,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
             }
         }
         if (vectorLength(vecPlayer) < 200) {
-            direction = -1;
+            direction = 0;
         }
     }
 
@@ -215,8 +228,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
         it != enemies.end(); ++it) {
         GameObject *obj = *it;
         if (*it != this) {
-            if (collisionLineRect((IntRect)(*it)->getSprite().getGlobalBounds(),
-                player.getPos())) {
+            while (checkCollision(obj)) {
                 Tank::update(time, -direction, -rotation, objects, bullets, anims);
             }
         }

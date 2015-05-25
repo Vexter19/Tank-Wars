@@ -6,6 +6,8 @@
 #include <cmath>
 #include <sstream>
 
+#define GERMANY 0
+#define USSR 1
 
 using namespace sf;
 

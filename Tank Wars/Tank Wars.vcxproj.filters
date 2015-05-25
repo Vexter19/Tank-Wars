@@ -111,6 +111,12 @@
     <ClCompile Include="RepairPoint.cpp">
       <Filter>Файлы исходного кода\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="ChangeTankPoint.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeTankMenu.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="View.h">
@@ -184,6 +190,12 @@
     </ClInclude>
     <ClInclude Include="RepairPoint.h">
       <Filter>Заголовочные файлы\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeTankPoint.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="ChangeTankMenu.h">
+      <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

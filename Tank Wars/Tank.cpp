@@ -68,14 +68,14 @@ void Tank::update(double time, short int direction, short int rotation,
             it != objects.end(); ++it) {
             GameObject *obj = *it;
             while (checkCollision(obj) == true) {
-                backToPrevPos(direction, backupPos);
+                backToPrevPos(direction, rotation, MULTIPLIER);
             }
         }
 
         // ќбрабатываем выход за границы карты
-        if (position.x >= mapWidth || position.x < 0 ||
-            position.y >= mapHeight || position.y < 0) {
-            backToPrevPos(direction, backupPos);
+        while (position.x > mapWidth || position.x < 0 ||
+            position.y > mapHeight || position.y < 0) {
+            backToPrevPos(direction, rotation, MULTIPLIER * 100);
         }
 
         // —читаем координаты центра башни.
@@ -158,9 +158,9 @@ bool Tank::isAlive()
     return life;
 }
 
-void Tank::backToPrevPos(int direction, Vector2f backupPos)
+void Tank::backToPrevPos(int direction, int rotation, float multiplier)
 {
-    
+    // ≈сли так случилось, что столкновение есть, а танк при этом не двигаетс€
     if (direction == 0) {
         dx = cos(angle * PI / 180);
         dy = sin(angle * PI / 180);
@@ -169,15 +169,30 @@ void Tank::backToPrevPos(int direction, Vector2f backupPos)
             dy *= -1;
         }
     }
-    
-    position.x = position.x - dx * MULTIPLIER;
-    position.y = position.y - dy * MULTIPLIER;
+
+    rotation *= -1;
+
+    position.x = position.x - dx * multiplier;
+    position.y = position.y - dy * multiplier;
+
+    if (position.x < -DIST_FROM_CORNER) {
+        position.x = 0;
+    }
+    if (position.x > mapWidth + DIST_FROM_CORNER) {
+        position.x = mapWidth;
+    }
+    if (position.y < -DIST_FROM_CORNER) {
+        position.y = 0;
+    }
+    if (position.y > mapHeight + DIST_FROM_CORNER) {
+        position.y = mapHeight;
+    }
+
     sprite.setPosition(position.x - dx, position.y - dy);
     spriteTurrel.setPosition(position.x - dx, position.y - dy);
 
     if (direction != 0) {
         prevDir = direction;
-        
     }
 }
 

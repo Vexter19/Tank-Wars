@@ -81,6 +81,8 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="ChangeTankMenu.cpp" />
+    <ClCompile Include="ChangeTankPoint.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -105,6 +107,8 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="ChangeTankMenu.h" />
+    <ClInclude Include="ChangeTankPoint.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Crosshair.h" />
     <ClInclude Include="cScreen.h" />

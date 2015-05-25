@@ -7,6 +7,8 @@
 class Player :
     public Tank
 {
+private:
+    int level;
 public:
     Player(Vector2f pos, TankCharacteristic tank);
 
@@ -17,6 +19,7 @@ public:
     double getReaminingTime();
     int getHealth();
     void setHealth(int health);
+    int getLevel();
 };
 
 #endif // !PLAYER_H

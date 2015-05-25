@@ -7,6 +7,7 @@
 
 #define SPEED_OF_RETURNING 10
 #define MULTIPLIER 0.01
+#define DIST_FROM_CORNER 10
 
 extern const double mapWidth;
 extern const double mapHeight;
@@ -19,7 +20,6 @@ class Tank :
     public GameObject
 {
 private:
-    Vector2f backupPos;
     int prevDir;
 protected:
     //Tank
@@ -35,7 +35,7 @@ protected:
     std::wstring name;
     bool life;
 
-    void backToPrevPos(int direction, Vector2f backupPos);
+    void backToPrevPos(int direction, int rotation, float multiplier);
     int rotate(Vector2f point, double &dir);
 
     //Turrel
