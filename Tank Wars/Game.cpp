@@ -9,8 +9,9 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
     Map &map, Player &player, Crosshair &crosshair, TankInfo &tankInfo,
     std::list<Enemy*> &enemies, std::list<Bullet*> &bullets,
     std::list<GameObject*> &objects, std::list<Animation*> &anims,
-    std::list<RepairPoint*> &repairPoints, float &timeBeforeRepairing,
-    short int direction, short int rotation, RenderWindow &window)
+    std::list<RepairPoint*> &repairPoints,
+    std::list<ChangeTankPoint*> &changePoints, float &timeBeforeRepairing,
+    short int direction, short int rotation, RenderWindow &window, int &kills)
 {
     Vector2u windowSize;
 
@@ -60,8 +61,8 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
     if (Keyboard::isKeyPressed(Keyboard::S)) {
         direction = -1;
     }
-    if (event.type == Event::MouseButtonPressed &&
-        event.key.code == Mouse::Left) {
+
+    if (Mouse::isButtonPressed(Mouse::Left)) {
         player.fire(bullets, texDynamicObjects);
     }
 
@@ -140,11 +141,12 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
         if ((*it_enemies)->isAlive() == false) {
             it_enemies = enemies.erase(it_enemies);
             delete e;
+            ++kills;
         } else {
             it_enemies++;
         }
     }
-
+    
     windowSize = window.getSize();
     Vector2i mousePos = getMouseCoords(Mouse::getPosition(window), windowSize);
     player.update(time, direction, rotation, objects, enemies, bullets, anims);
@@ -176,7 +178,25 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
         }
     }
 
-    std::cout << timeBeforeRepairing << "   " << time << "  " << repairPoints.size() << std::endl;  
+    for (std::list<ChangeTankPoint*>::iterator it_change = changePoints.begin();
+        it_change != changePoints.end();) {
+        ChangeTankPoint *change = *it_change;
+
+        if ((*it_change)->isAlive() == false) {
+            it_change = changePoints.erase(it_change);
+            delete change;
+        } else {
+            it_change++;
+        }
+    }
+
+    for (std::list<ChangeTankPoint*>::iterator it_change = changePoints.begin();
+        it_change != changePoints.end(); it_change++) {
+        (*it_change)->change(window, player, time);
+        (*it_change)->draw(window);
+    }
+
+   // std::cout << timeBeforeRepairing << "   " << time << "  " << repairPoints.size() << std::endl;  
    
 
     player.draw(window);

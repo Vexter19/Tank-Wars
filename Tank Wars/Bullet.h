@@ -6,6 +6,7 @@
 #include "Animation.h"
 
 #define DAMAGE_SCATTER 25
+#define BULLET_SPEED 300
 
 using namespace sf;
 

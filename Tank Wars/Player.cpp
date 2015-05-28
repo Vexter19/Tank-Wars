@@ -4,11 +4,11 @@
 Player::Player(Vector2f pos, TankCharacteristic tank) :
     Tank(pos, tank.texturePath, tank.texRectBody, tank.texRectTurrel,
     tank.turrelCenterX, tank.diffTankTurrel, tank.maxSpeed,
-    tank.speedOfRotation, tank.speedTurrel, tank.rechargeTime, tank.damage,
-    tank.name, tank.health)
+    tank.speedOfRotation, tank.speedTurrel, tank.rechargeTime, tank.damage * PLAYER_COEFF,
+    tank.name, tank.health * PLAYER_COEFF)
 {
     this->level = tank.level;
-    this->health = tank.health;
+    this->health = tank.health * PLAYER_COEFF;
 }
 
 void Player::update(double time, short int direction, short int rotation,

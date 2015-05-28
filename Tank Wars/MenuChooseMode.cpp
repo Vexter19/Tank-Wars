@@ -6,25 +6,27 @@ MenuChooseMode::MenuChooseMode(RenderWindow &window)
     MenuPoint point;
     Vector2f textPos;
 
+    point.text.setCharacterSize(48);
+
     point.text.setString(L"Выберите режим игры");
     point.value = MENU_NULL;
     point.isActive = false;
-    textPos.x = window.getSize().x / 2 - 50;
-    textPos.y = window.getSize().y / 2 - 100;
+    textPos.x = window.getSize().x / 2;
+    textPos.y = window.getSize().y / 2 - 2 * INTERVAL;
     point.pos = textPos;
     menuPoints.push_back(point);
 
     point.text.setString(L"Тест");
     point.value = SCR_GAME_TEST;
     point.isActive = true;
-    textPos.y += 50;
+    textPos.y += 2 * INTERVAL;
     point.pos = textPos;
     menuPoints.push_back(point);
 
     point.text.setString(L"Выживание");
     point.value = SCR_GAME_SURVIVAL;
     point.isActive = true;
-    textPos.y += 50;
+    textPos.y += INTERVAL;
     point.pos = textPos;
     menuPoints.push_back(point);
 }

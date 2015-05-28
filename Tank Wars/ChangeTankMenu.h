@@ -1,22 +1,33 @@
-#pragma once
+#ifndef CHANGETANKMENU_H
+#define CHANGETANKMENU_H
+
 #include "GameObject.h"
 #include <list>
 #include "TankCharacteristics.h"
 #include "Player.h"
+#include "MouseCursor.h"
+
+#define PREV -1
+#define NEXT 1
 
 
-struct TankTile
+class TankTile
 {
+public:
     Texture* tex;
     int level;
-    TankCharacteristic* characteristics;
+    TankCharacteristic characteristic;
+
+    TankTile(Texture* tex, int level, TankCharacteristic characteristic);
 };
 
 class ChangeTankMenu :
     public GameObject
 {
 private:
+    int playerLevel;
     std::list<TankTile*> tanks;
+
 
     Texture texTank1;
     Texture texTank2;
@@ -27,9 +38,17 @@ private:
     Sprite tank;
     Sprite arrowPrev;
     Sprite arrowNext;
+
+    MouseCursor* mouse;
+    // Спрайт, который содержит прямоугольник 1х1 в вершине указателя мыши
+    Sprite mousePoint;
 public:
-    ChangeTankMenu(Vector2f pos, int nation, Player &player);
-    void update();
-    void draw();
+    ChangeTankMenu(int nation, Player &player, Texture &texGUI);
+    bool run(Texture &texGUI, RenderWindow &window, Player &player);
+    void draw(RenderWindow &window);
 };
+
+#endif // !CHANGETANKMENU_H
+
+
 

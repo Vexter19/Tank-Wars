@@ -94,6 +94,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuChooseMode.cpp" />
+    <ClCompile Include="MenuLose.cpp" />
     <ClCompile Include="MenuMain.cpp" />
     <ClCompile Include="MenuPause.cpp" />
     <ClCompile Include="MouseCursor.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuChooseMode.h" />
+    <ClInclude Include="MenuLose.h" />
     <ClInclude Include="MenuMain.h" />
     <ClInclude Include="MenuPause.h" />
     <ClInclude Include="MouseCursor.h" />

@@ -1,5 +1,6 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
+
 #include <SFML/Graphics.hpp>
 #include "Collision.h"
 #include <list>
@@ -8,6 +9,8 @@
 
 #define GERMANY 0
 #define USSR 1
+#define MAIN_FONT "fonts\\farcry4.otf"
+
 
 using namespace sf;
 

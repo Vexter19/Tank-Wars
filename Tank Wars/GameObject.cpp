@@ -78,7 +78,7 @@ double convertMeters(double meters)
 // Преобразование скорости из км/ч в пикс/с
 double convertSpeed(double speed)
 {
-    return (speed * 3.95);
+    return (speed * 5.24);
 }
 
 double sqr(double x)

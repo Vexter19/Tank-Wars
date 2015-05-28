@@ -1,9 +1,11 @@
 #ifndef VIEW_H
 #define VIEW_H
+
 #include <SFML/Graphics.hpp>
 
 #define WINDOW_WIDTH 1366
 #define WINDOW_HEIGHT 768
+
 
 using namespace sf;
 extern View view;

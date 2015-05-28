@@ -8,6 +8,15 @@ Menu::Menu()
     alpha_max = 3 * 255;
     alpha_div = 3;
     playing = false;
+    backgroundPath = "images\\MenuBackground.png";
+}
+
+Menu::Menu(std::string backgroundPath)
+{
+    alpha_max = 3 * 255;
+    alpha_div = 3;
+    playing = false;
+    this->backgroundPath = backgroundPath;
 }
 
 int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
@@ -21,7 +30,7 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
     texGUI.loadFromFile("images/GUI.png");
 
     Texture background;
-    background.loadFromFile("images/MenuBackground.png");
+    background.loadFromFile(backgroundPath);
 
     Sprite sprite;
     sprite.setTexture(background);
@@ -33,7 +42,7 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
     std::cout << view.getCenter().x << "  " << view.getCenter().y << std::endl;
 
     Font font;
-    font.loadFromFile("calibrib.ttf");
+    font.loadFromFile(MAIN_FONT);
   
     int choise = MENU_NULL;
 
@@ -44,8 +53,9 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
 
     for (std::vector<MenuPoint>::iterator it = menuPoints.begin(); it != menuPoints.end(); it++)  {
         (*it).text.setFont(font);
-        (*it).text.setCharacterSize(MENU_POINT_SIZE);
+        //(*it).text.setCharacterSize(MENU_POINT_SIZE);
         (*it).text.setPosition((*it).pos.x + menuPos.x, (*it).pos.y + menuPos.y);
+        align(*it);
     }
 
     if (playing) {
@@ -74,7 +84,7 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
                 (*it).text.getGlobalBounds()) && (*it).isActive)
             {
                 choise = (*it).value;
-                (*it).text.setColor(Color(255, 0, 0, 255));
+                (*it).text.setColor(Color(159, 182, 205, 255));
                 break;
             }
         }
@@ -105,4 +115,11 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
     }
 
     return (-1);
+}
+
+void Menu::align(MenuPoint &point)
+{
+    FloatRect textRect = point.text.getLocalBounds();
+    point.text.setOrigin(textRect.left + textRect.width / 2.0f,
+        textRect.top + textRect.height / 2.0f);
 }

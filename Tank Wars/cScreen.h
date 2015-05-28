@@ -8,6 +8,7 @@
 //#define SCR_CHOOSE_NATION 2
 #define SCR_GAME_TEST 2
 #define SCR_GAME_SURVIVAL 3
+#define SCR_MENU_LOSE 4
 
 class cScreen
 {

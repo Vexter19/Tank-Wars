@@ -4,13 +4,13 @@
 Crosshair::Crosshair(Vector2f pos, Texture &tex, IntRect rect) :
 GameObject(pos, tex, rect)
 {
-    font.loadFromFile("Calibrib.ttf");
+    font.loadFromFile(MAIN_FONT);
 
     timeBeforeShoot.setFont(font);
-    timeBeforeShoot.setCharacterSize(16);
+    timeBeforeShoot.setCharacterSize(20);
 
     tankInfo.setFont(font);
-    tankInfo.setCharacterSize(16);
+    tankInfo.setCharacterSize(20);
 }
 
 

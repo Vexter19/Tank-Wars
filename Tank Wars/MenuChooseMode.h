@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MENUCHOOSEMODE_H
+#define MENUCHOOSEMODE_H
+
 #include "Menu.h"
 
 
@@ -12,3 +14,5 @@ public:
     int run(RenderWindow &window);
 };
 
+
+#endif // !MENUCHOOSEMODE_H

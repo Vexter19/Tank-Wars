@@ -1,7 +1,10 @@
 #ifndef PLAYER_H
 #define PLAYER_H
+
 #include "Tank.h"
 #include "Enemy.h"
+
+#define PLAYER_COEFF 1.3
 
 
 class Player :

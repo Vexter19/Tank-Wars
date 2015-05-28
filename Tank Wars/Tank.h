@@ -9,6 +9,7 @@
 #define MULTIPLIER 0.01
 #define DIST_FROM_CORNER 10
 
+
 extern const double mapWidth;
 extern const double mapHeight;
 

@@ -8,9 +8,9 @@ GameObject(pos, *tex, rect)
     this->angle = angle;
     sprite.setRotation(angle);
     this->damage = damage;
-    speed = convertSpeed(100);
-    dx = (speed) / 800 * cos(angle * 3.14 / 180);
-    dy = (speed) / 800 * sin(angle * 3.14 / 180);
+    speed = convertSpeed(BULLET_SPEED);
+    dx = (speed) / 1000 * cos(angle * 3.14 / 180);
+    dy = (speed) / 1000 * sin(angle * 3.14 / 180);
     life = true;
 }
 

@@ -1,7 +1,10 @@
-#pragma once
+#ifndef MENUPAUSE_H
+#define MENUPAUSE_H
+
 #include "Menu.h"
 
 #define SCR_CONTINUE 1
+
 
 class MenuPause :
     public Menu
@@ -13,3 +16,4 @@ public:
     int run(RenderWindow &window);
 };
 
+#endif // !MENUPAUSE_H

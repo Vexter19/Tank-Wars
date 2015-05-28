@@ -1,4 +1,8 @@
+#ifndef TANKCHARACTERISTICS_H
+#define TANKCHARACTERISTICS_H
+
 #include <SFML/Graphics.hpp>
+
 
 using namespace sf;
 
@@ -11,7 +15,7 @@ struct TankCharacteristic
     IntRect texRectTurrel; // Прямоугольник текстуры башни
     int turrelCenterX; // Абсцисса центра башни (относительно текстуры башни)
     int diffTankTurrel; // Расстояние между центром танка и
-                        // центром оси вращения башни
+    // центром оси вращения башни
     double maxSpeed; // Максимальная скорость танка, км/ч
     double speedOfRotation; // Скорость поворота вокруг оси, град/с 
     double speedTurrel; // Скорость вращения башни, град/с
@@ -31,3 +35,5 @@ extern TankCharacteristic germanyPZIV;
 extern TankCharacteristic germanyTiger1;
 extern TankCharacteristic germanyTiger2;
 extern TankCharacteristic germanyMaus;
+
+#endif // !TANKCHARACTERISTICS_H
