@@ -21,6 +21,14 @@ void Player::update(double time, short int direction, short int rotation,
             rotation *= -1;
         }
 
+        if ((direction != 0) || (rotation != 0)) {
+            if (soundPlayerVehicle.getStatus() != SoundSource::Status::Playing) {
+                soundPlayerVehicle.play();
+            }
+        } else {
+            soundPlayerVehicle.pause();
+        }
+        
         Tank::update(time, direction, rotation, objects, bullets, anims);
 
         for (std::list<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {

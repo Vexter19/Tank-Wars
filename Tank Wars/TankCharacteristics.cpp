@@ -6,7 +6,7 @@
 
 TankCharacteristic ussrT46 = { L"T-46", 1, "images/T-46.png",
 IntRect(0, 0, 100, 48), IntRect(0, 51, 85, 29),
-17, 2, 59, 52, 44, 0.6, 14, 250 };
+17, 2, 59, 52, 44, 0.6, 14, -1 }; // 250hp
 
 TankCharacteristic ussrT34 = { L"T-34", 2, "images/T-34.png",
 IntRect(0, 0, 112, 56), IntRect(0, 58, 128, 42),

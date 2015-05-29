@@ -6,6 +6,8 @@
 #include <list>
 #include <cmath>
 #include <sstream>
+#include "global.h"
+#include <SFML/Audio.hpp>
 
 #define GERMANY 0
 #define USSR 1

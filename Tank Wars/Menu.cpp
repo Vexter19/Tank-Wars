@@ -9,6 +9,9 @@ Menu::Menu()
     alpha_div = 3;
     playing = false;
     backgroundPath = "images\\MenuBackground.png";
+
+    soundBufferMenuArrow.loadFromFile("audio\\menu_arrow.wav");
+    soundBufferMenuClick.loadFromFile("audio\\menu_click.wav");
 }
 
 Menu::Menu(std::string backgroundPath)
@@ -17,6 +20,9 @@ Menu::Menu(std::string backgroundPath)
     alpha_div = 3;
     playing = false;
     this->backgroundPath = backgroundPath;
+
+    soundBufferMenuArrow.loadFromFile("audio\\menu_arrow.wav");
+    soundBufferMenuClick.loadFromFile("audio\\menu_click.wav");
 }
 
 int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
@@ -39,7 +45,6 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
     menuPos.x = view.getCenter().x - view.getSize().x / 2;
     menuPos.y = view.getCenter().y - view.getSize().y / 2;
     sprite.setPosition(menuPos);
-    std::cout << view.getCenter().x << "  " << view.getCenter().y << std::endl;
 
     Font font;
     font.loadFromFile(MAIN_FONT);
@@ -61,7 +66,7 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
     if (playing) {
         alpha = alpha_max;
     }
-
+    bool wasPlayed = false;
     while (running) {
         while (window.pollEvent(event)) {
             if (event.type == Event::Closed) {
@@ -72,10 +77,14 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
         if (event.type == Event::MouseButtonPressed &&
             event.key.code == Mouse::Left) {
             if (choise != MENU_NULL) {
+                
+                sound.setBuffer(soundBufferMenuClick);
+                sound.play();
+
                 return choise;
             }
         }
-
+        
         for (std::vector<MenuPoint>::iterator it = menuPoints.begin();
             it != menuPoints.end(); it++) {
             (*it).text.setColor(Color(255, 255, 255, 255));
@@ -85,10 +94,19 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
             {
                 choise = (*it).value;
                 (*it).text.setColor(Color(159, 182, 205, 255));
+
+                sound.setBuffer(soundBufferMenuArrow);
+                if (wasPlayed == false){
+                    sound.play();
+                    wasPlayed = true;
+                }
+
                 break;
             }
         }
-
+        if (choise == MENU_NULL) {
+            wasPlayed = false;
+        }
         // ѕостепенно уменьшаем прозрачность.
         if (alpha < alpha_max) {
             alpha++;
@@ -100,13 +118,11 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
         window.draw(sprite);
 
         //  огда прозрачность = 0, отображаем текст.
-        //if (alpha == alpha_max) {
-            for (std::vector<MenuPoint>::iterator it = menuPoints.begin();
-                it != menuPoints.end(); it++)  {
-               // std::cout << (*it).text.getPosition().x << "  " << (*it).text.getPosition().y << std::endl;
-                window.draw((*it).text);
-            }
-        //}
+        for (std::vector<MenuPoint>::iterator it = menuPoints.begin();
+            it != menuPoints.end(); it++)  {
+            window.draw((*it).text);
+        }
+
         Vector2i mousePos =
             getMouseCoords(Mouse::getPosition(window), windowSize);
         mouse.update((Vector2f)mousePos);

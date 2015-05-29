@@ -47,8 +47,11 @@ bool Bullet::isAlive()
 void Bullet::Destroy(std::list<Animation*> &anims)
 {
     life = false;
-    anims.push_back(new Animation(*texture, 13, false, IntRect(0, 10, 40, 40),
-        Vector2f(position.x, position.y)));
+
+    if (graphicsSettings == HIGH) {
+        anims.push_back(new Animation(*texture, 13, false, IntRect(0, 10, 40, 40),
+            Vector2f(position.x, position.y)));
+    }
 }
 
 int Bullet::getDmg()

@@ -32,7 +32,8 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
     Vector2f vecPlayer; // ¬ектор между врагом и игроком
     vecPlayer.x = player.getPos().x - position.x;
     vecPlayer.y = player.getPos().y - position.y;
-    if ((vectorLength(vecPlayer) < VISIBILITY) && (player.isAlive())) {
+    double vecLength = vectorLength(vecPlayer);
+    if ((vecLength < VISIBILITY) && (player.isAlive())) {
         alert = true;
     } else {
         alert = false;
@@ -49,7 +50,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
         }
     }
 
-    if (alert == false) { // ≈сли враг не видит игрока
+    if (alert == false && life == true) { // ≈сли враг не видит игрока
         // TODO поворачиваем на случайный угол
         // пока не проехали нужное рассто€ние
         if (travelled < distance) {
@@ -156,7 +157,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
                 distance = GO_DISTANCE + (rand() % 10) - 5;
             }
         }
-    } else {
+    } else if (life == true) {
         // ≈сли враг видит игрока
         for (std::list<GameObject*>::iterator it = objects.begin();
             it != objects.end(); ++it) {
@@ -220,6 +221,21 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
         if (vectorLength(vecPlayer) < 200) {
             direction = 0;
         }
+    }
+    if ((direction != 0) || (rotation != 0)) {
+        int volume = (-50 * vecLength + 50000) / 900;
+        if (volume >= 0) {
+            soundVehicle.setVolume(volume);
+        } else if (volume > 50) {
+            soundVehicle.setVolume(50);
+        } else {
+            soundVehicle.setVolume(0);
+        }
+        if (soundVehicle.getStatus() != SoundSource::Status::Playing) {
+            soundVehicle.play();
+        }
+    } else {
+        soundVehicle.pause();
     }
 
     Tank::update(time, direction, rotation, objects, bullets, anims);

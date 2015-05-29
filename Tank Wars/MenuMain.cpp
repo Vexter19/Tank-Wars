@@ -34,5 +34,21 @@ MenuMain::MenuMain(RenderWindow &window) : Menu()
 
 int MenuMain::run(RenderWindow &window)
 {
+    // Выбираем случайную музыку
+    srand(time(NULL));
+    int rand_theme = rand() % 2;
+    switch (rand_theme) {
+        case 0:
+            music.openFromFile("audio\\main1.wav");
+            break;
+        case 1:
+            music.openFromFile("audio\\main2.wav");
+            break;
+        default:
+            music.openFromFile("audio\\main1.wav");
+            break;
+    }
+    music.setVolume(50);
+    music.play();
     return Menu::run(window, menuPoints);
 }

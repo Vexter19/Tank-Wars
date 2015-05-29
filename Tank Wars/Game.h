@@ -13,6 +13,7 @@
 #include <iostream>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "MenuPause.h"
 #include "RepairPoint.h"
 #include "ChangeTankPoint.h"

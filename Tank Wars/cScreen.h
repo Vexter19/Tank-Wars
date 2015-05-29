@@ -9,6 +9,8 @@
 #define SCR_GAME_TEST 2
 #define SCR_GAME_SURVIVAL 3
 #define SCR_MENU_LOSE 4
+#define SCR_MENU_SAVE_RECORD 5
+#define SCR_SAVE_AND_EXIT_TO_MENU 6
 
 class cScreen
 {

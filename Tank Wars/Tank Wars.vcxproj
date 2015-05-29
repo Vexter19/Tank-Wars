@@ -90,6 +90,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameTest.cpp" />
+    <ClCompile Include="global.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -97,6 +98,7 @@
     <ClCompile Include="MenuLose.cpp" />
     <ClCompile Include="MenuMain.cpp" />
     <ClCompile Include="MenuPause.cpp" />
+    <ClCompile Include="MenuSaveRecord.cpp" />
     <ClCompile Include="MouseCursor.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RepairPoint.cpp" />
@@ -118,12 +120,14 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameTest.h" />
+    <ClInclude Include="global.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuChooseMode.h" />
     <ClInclude Include="MenuLose.h" />
     <ClInclude Include="MenuMain.h" />
     <ClInclude Include="MenuPause.h" />
+    <ClInclude Include="MenuSaveRecord.h" />
     <ClInclude Include="MouseCursor.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RepairPoint.h" />

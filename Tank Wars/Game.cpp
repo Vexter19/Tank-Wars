@@ -3,6 +3,19 @@
 
 Game::Game(void)
 {
+    soundBufferShoot.loadFromFile("audio\\shot_light.wav");
+    soundBufferVehicle.loadFromFile("audio\\vehicle.wav");
+    soundBufferRepairOn.loadFromFile("audio\\repaired.wav");
+
+    soundShoot.setBuffer(soundBufferShoot);
+    soundVehicle.setBuffer(soundBufferVehicle);
+    soundVehicle.setLoop(true);
+
+    soundPlayerVehicle.setBuffer(soundBufferVehicle);
+    soundPlayerVehicle.setVolume(50);
+    soundPlayerVehicle.setLoop(true);
+
+    soundRepairOn.setBuffer(soundBufferRepairOn);
 }
 
 int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
@@ -25,6 +38,9 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
         // Создаём экран "Меню паузы"
         std::vector<MenuPoint> menuPoints;
         MenuPoint point;
+
+        soundVehicle.stop();
+        soundPlayerVehicle.stop();
 
         point.text.setString(L"Продолжить");
         point.value = 1;

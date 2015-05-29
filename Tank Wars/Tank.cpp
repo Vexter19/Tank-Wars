@@ -124,6 +124,8 @@ void Tank::fire(std::list<Bullet*> &bullets, Texture &texBullet)
         gunVertex.y = position.y + barrel * sin(dirTurrel * PI / 180);
         bullets.push_back(new Bullet(gunVertex, dirTurrel, &texBullet, IntRect(0, 0, 17, 5), this->damage));
         remainingTime = rechargeTime;
+
+        soundShoot.play();
     }
 }
 
