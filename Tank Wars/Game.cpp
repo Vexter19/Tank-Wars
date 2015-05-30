@@ -37,9 +37,21 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
 {
     Vector2u windowSize;
 
+   
+
+    static bool isStopped = false;
+
     while (window.pollEvent(event)) {
         if (event.type == Event::Closed) {
             return -1;
+        }
+
+        if (event.type == Event::LostFocus) {
+            isStopped = true;
+        }
+
+        if (event.type == Event::GainedFocus) {
+            isStopped = false;
         }
     }
 
@@ -93,8 +105,12 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
 
     if (event.type == Event::MouseButtonPressed &&
         event.key.code == Mouse::Right) {
-        enemies.clear();
+
+        window.setFramerateLimit(75);
+        window.setVerticalSyncEnabled(true);
+        window.create(VideoMode::getDesktopMode(), "Tank Wars");
     }
+
 
     // Зум. Работает косячно.
     if (event.type == Event::MouseWheelMoved) {
@@ -120,11 +136,15 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
         }
         event.mouseWheel.delta = 0;
     }
-
-
-    double time = (double)clock.getElapsedTime().asMicroseconds();
-    time = time / 1000;
-    clock.restart();
+    
+    double time;
+    if (isStopped == false) {
+        time = (double)clock.getElapsedTime().asMicroseconds();
+        time = time / 1000;
+        clock.restart();
+    } else {
+        time = 0;
+    }
 
     timeBeforeRepairing -= time / 1000;
     if (timeBeforeRepairing < 0) {

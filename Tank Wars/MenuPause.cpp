@@ -3,7 +3,12 @@
 
 MenuPause::MenuPause()
 {
-    
+    soundIdle.pause();
+    soundVehicle.pause();
+    soundPlayerIdle.pause();
+    soundPlayerVehicle.pause();
+
+    music.play();
 }
 
 

@@ -17,6 +17,7 @@
 #include "MenuPause.h"
 #include "RepairPoint.h"
 #include "ChangeTankPoint.h"
+#include "ChooseNation.h"
 
 #define MIN_REPAIR_INTERVAL 30.0
 

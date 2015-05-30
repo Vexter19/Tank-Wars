@@ -120,14 +120,17 @@
     <ClCompile Include="MenuLose.cpp">
       <Filter>Файлы исходного кода\Screens\Menu</Filter>
     </ClCompile>
-    <ClCompile Include="MenuSaveRecord.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="global.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="ChooseNation.cpp">
+      <Filter>Файлы исходного кода\Screens\Menu</Filter>
+    </ClCompile>
     <ClCompile Include="MenuRecords.cpp">
-      <Filter>Файлы исходного кода</Filter>
+      <Filter>Файлы исходного кода\Screens\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuSaveRecord.cpp">
+      <Filter>Файлы исходного кода\Screens\Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,14 +215,17 @@
     <ClInclude Include="MenuLose.h">
       <Filter>Заголовочные файлы\Screens\Menu</Filter>
     </ClInclude>
-    <ClInclude Include="MenuSaveRecord.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="global.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="MenuRecords.h">
-      <Filter>Заголовочные файлы</Filter>
+      <Filter>Заголовочные файлы\Screens\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuSaveRecord.h">
+      <Filter>Заголовочные файлы\Screens\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="ChooseNation.h">
+      <Filter>Заголовочные файлы\Screens\Menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
