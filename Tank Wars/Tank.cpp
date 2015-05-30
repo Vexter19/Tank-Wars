@@ -73,9 +73,17 @@ void Tank::update(double time, short int direction, short int rotation,
         }
 
         // ќбрабатываем выход за границы карты
-        while (position.x > mapWidth || position.x < 0 ||
-            position.y > mapHeight || position.y < 0) {
-            backToPrevPos(direction, rotation, MULTIPLIER * 100);
+        if (position.x < 0) {
+            position.x = 1;
+        }
+        if (position.x > mapWidth) {
+            position.x = mapWidth - 1;
+        }
+        if (position.y < 0) {
+            position.y = 1;
+        }
+        if (position.y > mapHeight) {
+            position.y = mapHeight - 1;
         }
 
         // —читаем координаты центра башни.
@@ -88,9 +96,13 @@ void Tank::update(double time, short int direction, short int rotation,
     }
 }
 
-void Tank::rotateTurrel(Vector2i mouseVector)
+void Tank::rotateTurrel(Vector2i mouseVector, int rotation, int direction)
 {
-    dirTurrel += rotate((Vector2f)mouseVector, dirTurrel) * speedTurrel / 100;
+    if (direction == -1) {
+        rotation *= -1;
+    }
+    dirTurrel += (rotate((Vector2f)mouseVector, dirTurrel) *
+        speedTurrel + speedOfRotation * rotation)  / 100;
     spriteTurrel.setRotation(dirTurrel);
 }
 

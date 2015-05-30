@@ -26,6 +26,7 @@ double vectorLength(Vector2f a);
 Vector2f normalizeVector(Vector2f a);
 
 std::string numToStr(double number);
+std::wstring numToWStr(double number);
 
 class GameObject
 {

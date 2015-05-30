@@ -23,6 +23,13 @@ MenuMain::MenuMain(RenderWindow &window) : Menu()
     point.pos = textPos;
     menuPoints.push_back(point);
 
+    point.text.setString(L"Рекорды");
+    point.value = SCR_MENU_RECORDS;
+    point.isActive = true;
+    textPos.y += INTERVAL;
+    point.pos = textPos;
+    menuPoints.push_back(point);
+
     point.text.setString(L"Выход");
     point.value = SCR_EXIT;
     point.isActive = true;

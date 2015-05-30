@@ -118,7 +118,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
                 }
             }
 
-            rotateTurrel((Vector2i)calmRotateTo1);
+            rotateTurrel((Vector2i)calmRotateTo1, rotation, direction);
         } else {
 
             //  ак только прекратили движение, определ€ем направлени€,
@@ -140,7 +140,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
                 rotation = 0;
 
                 if (rotated == 0) {
-                    rotateTurrel((Vector2i)calmRotateTo1);
+                    rotateTurrel((Vector2i)calmRotateTo1, rotation, direction);
                     if ((dirTurrel < (calmRotateAngle1 + 5)) &&
                         (dirTurrel >(calmRotateAngle1 - 5))) {
                         rotated = 1;
@@ -148,7 +148,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
                 }
 
                 if (rotated == 1) {
-                    rotateTurrel((Vector2i)calmRotateTo2);
+                    rotateTurrel((Vector2i)calmRotateTo2, rotation, direction);
                 }    
             } else {
                 rotated = 0;
@@ -194,7 +194,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
         }
 
         // ѕоворот башни на игрока
-        rotateTurrel((Vector2i)player.getPos());
+        rotateTurrel((Vector2i)player.getPos(), rotation, direction);
 
         /* ≈сли угол между вектором направлени€ башни врага
         и игроком меньше 10 градусов, а также если нет преп€тствий
@@ -232,10 +232,14 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
             soundVehicle.setVolume(0);
         }
         if (soundVehicle.getStatus() != SoundSource::Status::Playing) {
+            soundIdle.pause();
             soundVehicle.play();
         }
     } else {
         soundVehicle.pause();
+        if (soundIdle.getStatus() != SoundSource::Status::Playing) {
+            soundIdle.play();
+        }
     }
 
     Tank::update(time, direction, rotation, objects, bullets, anims);
@@ -244,7 +248,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
         it != enemies.end(); ++it) {
         GameObject *obj = *it;
         if (*it != this) {
-            while (checkCollision(obj)) {
+            if (checkCollision(obj)) {
                 Tank::update(time, -direction, -rotation, objects, bullets, anims);
             }
         }

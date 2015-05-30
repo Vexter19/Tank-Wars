@@ -67,7 +67,7 @@ public:
     bool isAlive();
 
     //Turrel 
-    void rotateTurrel(Vector2i mousePos);
+    void rotateTurrel(Vector2i mousePos, int rotation, int direction);
     double getTurrelDir();
     IntRect getTurrelRect();
 };

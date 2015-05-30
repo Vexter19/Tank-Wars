@@ -29,6 +29,13 @@ MenuChooseMode::MenuChooseMode(RenderWindow &window)
     textPos.y += INTERVAL;
     point.pos = textPos;
     menuPoints.push_back(point);
+
+    point.text.setString(L"Назад");
+    point.value = SCR_MAIN_MENU;
+    point.isActive = true;
+    textPos.y += INTERVAL;
+    point.pos = textPos;
+    menuPoints.push_back(point);
 }
 
 

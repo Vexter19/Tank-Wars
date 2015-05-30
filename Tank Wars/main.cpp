@@ -33,6 +33,10 @@ int main()
     GameSurvival gameSurvival;
     screens.push_back(&gameSurvival);
 
+    // Создаём экран "Рекорды"
+    MenuRecords menuRecords(window);
+    screens.push_back(&menuRecords);
+
     while (screen >= 0) {
         screen = screens[screen]->run(window);
     }

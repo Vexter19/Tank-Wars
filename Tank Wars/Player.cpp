@@ -23,10 +23,14 @@ void Player::update(double time, short int direction, short int rotation,
 
         if ((direction != 0) || (rotation != 0)) {
             if (soundPlayerVehicle.getStatus() != SoundSource::Status::Playing) {
+                soundPlayerIdle.pause();
                 soundPlayerVehicle.play();
             }
         } else {
             soundPlayerVehicle.pause();
+            if (soundPlayerIdle.getStatus() != SoundSource::Status::Playing) {
+                soundPlayerIdle.play();
+            }
         }
         
         Tank::update(time, direction, rotation, objects, bullets, anims);

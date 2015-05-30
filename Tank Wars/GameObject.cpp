@@ -98,6 +98,19 @@ std::string numToStr(double number)
     return buff.str();
 }
 
+std::wstring numToWStr(double number)
+{
+    // Округляем число до сотых.
+    number *= 100;
+    int int_number = (int)number;
+    number = double(int_number) / 100;
+
+    std::wostringstream buff;
+    buff << number;
+    return buff.str();
+}
+
+
 double scalarProd(Vector2f a, Vector2f b)
 {
     Vector2f result;

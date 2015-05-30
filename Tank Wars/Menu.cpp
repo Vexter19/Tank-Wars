@@ -112,7 +112,6 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
             alpha++;
         }
         sprite.setColor(Color(255, 255, 255, alpha / alpha_div));
-
         
         window.clear();
         window.draw(sprite);

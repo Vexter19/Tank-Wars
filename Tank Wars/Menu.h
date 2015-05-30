@@ -11,11 +11,19 @@
 #define MENU_POINT_SIZE 36
 #define INTERVAL 70
 
-struct MenuPoint {
+struct MenuPoint
+{
     Text text;
     int value;
     Vector2f pos;
     bool isActive;
+};
+
+struct RecordItem
+{
+    std::wstring name;
+    std::wstring tankName;
+    int record;
 };
 
 class Menu :

@@ -6,14 +6,23 @@ Game::Game(void)
     soundBufferShoot.loadFromFile("audio\\shot_light.wav");
     soundBufferVehicle.loadFromFile("audio\\vehicle.wav");
     soundBufferRepairOn.loadFromFile("audio\\repaired.wav");
+    soundBufferIdle.loadFromFile("audio\\idle.wav");
 
     soundShoot.setBuffer(soundBufferShoot);
+
     soundVehicle.setBuffer(soundBufferVehicle);
     soundVehicle.setLoop(true);
 
     soundPlayerVehicle.setBuffer(soundBufferVehicle);
     soundPlayerVehicle.setVolume(50);
     soundPlayerVehicle.setLoop(true);
+
+    soundIdle.setBuffer(soundBufferIdle);
+    soundIdle.setLoop(true);
+
+    soundPlayerIdle.setBuffer(soundBufferIdle);
+    soundPlayerIdle.setVolume(50);
+    soundPlayerIdle.setLoop(true);
 
     soundRepairOn.setBuffer(soundBufferRepairOn);
 }
@@ -166,7 +175,7 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
     windowSize = window.getSize();
     Vector2i mousePos = getMouseCoords(Mouse::getPosition(window), windowSize);
     player.update(time, direction, rotation, objects, enemies, bullets, anims);
-    player.rotateTurrel(mousePos);
+    player.rotateTurrel(mousePos, rotation, direction);
 
     window.setView(view);
     window.clear();

@@ -98,6 +98,7 @@
     <ClCompile Include="MenuLose.cpp" />
     <ClCompile Include="MenuMain.cpp" />
     <ClCompile Include="MenuPause.cpp" />
+    <ClCompile Include="MenuRecords.cpp" />
     <ClCompile Include="MenuSaveRecord.cpp" />
     <ClCompile Include="MouseCursor.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="MenuLose.h" />
     <ClInclude Include="MenuMain.h" />
     <ClInclude Include="MenuPause.h" />
+    <ClInclude Include="MenuRecords.h" />
     <ClInclude Include="MenuSaveRecord.h" />
     <ClInclude Include="MouseCursor.h" />
     <ClInclude Include="Player.h" />
