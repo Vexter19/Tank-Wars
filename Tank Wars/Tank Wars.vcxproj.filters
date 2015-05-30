@@ -132,6 +132,9 @@
     <ClCompile Include="MenuSaveRecord.cpp">
       <Filter>Файлы исходного кода\Screens\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="MenuSettings.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="View.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="ChooseNation.h">
       <Filter>Заголовочные файлы\Screens\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuSettings.h">
+      <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -11,6 +11,7 @@
 #include "MenuChooseMode.h"
 #include "MenuPause.h"
 #include "MenuRecords.h"
+#include "MenuSettings.h"
 
 #include "GameSurvival.h"
 #include "GameTest.h"

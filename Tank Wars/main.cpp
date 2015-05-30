@@ -37,6 +37,10 @@ int main()
     MenuRecords menuRecords(window);
     screens.push_back(&menuRecords);
 
+    // Создаём экран "Настройки"
+    MenuSettings menuSettings(window);
+    screens.push_back(&menuSettings);
+
     while (screen >= 0) {
         screen = screens[screen]->run(window);
     }

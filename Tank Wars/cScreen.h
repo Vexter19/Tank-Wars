@@ -13,6 +13,7 @@
 #define SCR_SAVE_AND_EXIT_TO_MENU 6
 #define SCR_MENU_RECORDS 4
 #define SCR_CHOOSE_NATION 2
+#define SCR_MENU_SETTINGS 5
 
 class cScreen
 {
