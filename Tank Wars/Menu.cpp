@@ -109,7 +109,7 @@ int Menu::run(RenderWindow &window, std::vector<MenuPoint> menuPoints)
         }
         // ѕостепенно уменьшаем прозрачность.
         if (alpha < alpha_max) {
-            alpha++;
+            alpha = alpha + 5;
         }
         sprite.setColor(Color(255, 255, 255, alpha / alpha_div));
         
