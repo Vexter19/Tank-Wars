@@ -35,6 +35,14 @@ void Tank::update(double time, short int direction, short int rotation,
         life = false;
     }
     if (life == true) {
+        if (direction == 1) {
+            backupPos.x = position.x - cos(angle * PI / 180);
+            backupPos.y = position.y - sin(angle * PI / 180);
+        } else if (direction == -1) {
+            backupPos.x = position.x + cos(angle * PI / 180);
+            backupPos.y = position.y + sin(angle * PI / 180);
+        }
+
         angle += speedOfRotation * rotation * time / 1000;
         speed = (direction > 0) ? (maxSpeed * direction) : (maxSpeed * direction / 2);
 
@@ -73,17 +81,25 @@ void Tank::update(double time, short int direction, short int rotation,
         }
 
         // ќбрабатываем выход за границы карты
-        if (position.x < 0) {
+        /*if (position.x < 0) {
             position.x = 1;
+            position.y = ba
         }
         if (position.x > mapWidth) {
             position.x = mapWidth - 1;
+            position.y -= dy;
         }
         if (position.y < 0) {
             position.y = 1;
+            position.x -= dx;
         }
         if (position.y > mapHeight) {
             position.y = mapHeight - 1;
+            position.x -= dx;
+        }*/
+        if (position.x >= mapWidth || position.x < 0 ||
+            position.y >= mapHeight || position.y < 0) {
+            position = backupPos;
         }
 
         // —читаем координаты центра башни.
@@ -102,7 +118,7 @@ void Tank::rotateTurrel(Vector2i mouseVector, int rotation, int direction)
         rotation *= -1;
     }
     dirTurrel += (rotate((Vector2f)mouseVector, dirTurrel) *
-        speedTurrel + speedOfRotation * rotation)  / 100;
+        speedTurrel + speedOfRotation * rotation) / 50;
     spriteTurrel.setRotation(dirTurrel);
 }
 
@@ -124,7 +140,8 @@ IntRect Tank::getTurrelRect()
     return spriteTurrel.getTextureRect();
 }
 
-void Tank::fire(std::list<Bullet*> &bullets, Texture &texBullet)
+void Tank::fire(std::list<Animation*> &anims,std::list<Bullet*> &bullets,
+    Texture &texBullet)
 {
     if (remainingTime == 0) {
         Vector2f gunVertex;
@@ -134,7 +151,9 @@ void Tank::fire(std::list<Bullet*> &bullets, Texture &texBullet)
         // —читаем координаты вершины оруди€
         gunVertex.x = position.x + barrel * cos(dirTurrel * PI / 180);
         gunVertex.y = position.y + barrel * sin(dirTurrel * PI / 180);
-        bullets.push_back(new Bullet(gunVertex, dirTurrel, &texBullet, IntRect(0, 0, 17, 5), this->damage));
+        
+        bullets.push_back(new Bullet(anims, gunVertex, dirTurrel, &texBullet,
+            IntRect(0, 0, 17, 5), this->damage));
         remainingTime = rechargeTime;
 
         soundShoot.play();
@@ -202,8 +221,11 @@ void Tank::backToPrevPos(int direction, int rotation, float multiplier)
         position.y = mapHeight;
     }
 
+    double xTur = position.x + diffTankTurrel * cos(angle * PI / 180);
+    double yTur = position.y + diffTankTurrel * sin(angle * PI / 180);
+
     sprite.setPosition(position.x - dx, position.y - dy);
-    spriteTurrel.setPosition(position.x - dx, position.y - dy);
+    spriteTurrel.setPosition(xTur - dx, yTur - dy);
 
     if (direction != 0) {
         prevDir = direction;

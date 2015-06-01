@@ -44,7 +44,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
         it != enemies.end(); ++it) {
         GameObject *obj = *it;
         if (*it != this) {
-            if (checkCollision(obj)) {
+            if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())) {
                 willCollidedWithEnemy = true;
             }
         }
@@ -159,7 +159,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
         }
     } else if (life == true) {
         // Если враг видит игрока
-        for (std::list<GameObject*>::iterator it = objects.begin();
+        /*for (std::list<GameObject*>::iterator it = objects.begin();
             it != objects.end(); ++it) {
 
             GameObject *obj = *it;
@@ -178,6 +178,67 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
             } else {
                 direction = 1;
                 rotation = 0;
+            }
+        }*/
+        for (std::list<GameObject*>::iterator it = objects.begin();
+            it != objects.end(); ++it) {
+
+            GameObject *obj = *it;
+            if (Collision::BoundingBoxTest(bigSprite, obj->getSprite()) ||
+                isOutOfMap() || willCollidedWithEnemy) {
+                // Если на пути есть объект или враг или скоро конец карты...
+                srand(time);
+                int randDir;
+
+                // Случайно выбираем направление, в каком объезжать препятствие
+                if ((rand() % 2) == 0) {
+                    randDir = -1;
+                } else {
+                    randDir = 1;
+                }
+
+                // Сравниваем направление поворота с предыдущим.
+                // Если они одинаковые, то меняем направление.
+                if (prevRandDir == randDir) {
+                    randDir *= -1;
+                }
+                prevRandDir = randDir;
+
+                double backupAngle = bigSprite.getRotation();
+
+                // Пробуем повернуться в одну сторону
+                bigSprite.setRotation(backupAngle + randDir * TRY_ROTATE_ANGLE);
+
+                // Если в этом направлении нет препятствий, то поворачиваемся так
+                if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())
+                    == false && !isOutOfMap()) {
+                    rotation = randDir;
+                    break;
+                } else {
+                    // Иначе пробуем повернуться в противоположном направлении
+                    bigSprite.setRotation(backupAngle - randDir * TRY_ROTATE_ANGLE);
+
+                    if (Collision::BoundingBoxTest(bigSprite, obj->getSprite())
+                        == false && !isOutOfMap()) {
+                        rotation = randDir * -1;
+                        break;
+                    } else {
+                        direction = -1;
+                        rotation = randDir;
+                    }
+                }
+            } else {
+                // Если впереди чисто, просто едем вперёд
+                direction = 1;
+                rotation = 0;
+
+                // Сохраняем вектор направления
+                calmRotateTo1.x = this->getPos().x + 10 * cos(angle * PI / 180);
+                calmRotateTo1.y = this->getPos().y + 10 * sin(angle * PI / 180);
+            }
+
+            if (isOutOfMap()) {
+                direction = -1;
             }
         }
 
@@ -215,7 +276,7 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
             }
 
             if (canAimTo == true) {
-                fire(bullets, *texDynamicObjects);
+                fire(anims, bullets, *texDynamicObjects);
             }
         }
         if (vectorLength(vecPlayer) < 200) {
@@ -248,8 +309,10 @@ void Enemy::update(double time, Tank &player, std::list<Bullet*> &bullets,
         it != enemies.end(); ++it) {
         GameObject *obj = *it;
         if (*it != this) {
-            if (checkCollision(obj)) {
+            int cycles = 0;
+            while ((checkCollision(obj)) && cycles < 200) {
                 Tank::update(time, -direction, -rotation, objects, bullets, anims);
+                cycles++;
             }
         }
     }

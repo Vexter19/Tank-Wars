@@ -4,7 +4,7 @@
 #include "Tank.h"
 #include "Enemy.h"
 
-#define PLAYER_COEFF 5
+#define PLAYER_COEFF 2
 
 
 class Player :

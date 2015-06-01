@@ -1,7 +1,8 @@
 #include "Bullet.h"
 
 
-Bullet::Bullet(Vector2f pos, float angle, Texture *tex, IntRect rect, int damage) :
+Bullet::Bullet(std::list<Animation*> &anims, Vector2f pos, float angle,
+    Texture *tex, IntRect rect, int damage) :
 GameObject(pos, *tex, rect)
 {
     texture = tex;
@@ -12,6 +13,9 @@ GameObject(pos, *tex, rect)
     dx = (speed) / 1000 * cos(angle * 3.14 / 180);
     dy = (speed) / 1000 * sin(angle * 3.14 / 180);
     life = true;
+
+    anims.push_back(new Animation(*texture, 10, false, IntRect(0, 107, 45, 45),
+        Vector2f(position.x, position.y)));
 }
 
 void Bullet::update(double time, View &view, RenderWindow &window,
@@ -48,8 +52,11 @@ void Bullet::Destroy(std::list<Animation*> &anims)
 {
     life = false;
 
-    if (graphicsSettings == HIGH) {
+    if (graphicsSettings == LOW) {
         anims.push_back(new Animation(*texture, 13, false, IntRect(0, 10, 40, 40),
+            Vector2f(position.x, position.y)));
+    } else {
+        anims.push_back(new Animation(*texture, 10, false, IntRect(5, 56, 40, 40),
             Vector2f(position.x, position.y)));
     }
 }

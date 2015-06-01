@@ -53,6 +53,24 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
         if (event.type == Event::GainedFocus) {
             isStopped = false;
         }
+
+        if (event.type == Event::MouseButtonPressed &&
+            event.key.code == Mouse::Right) {
+            view.setSize(WINDOW_WIDTH * 2, WINDOW_HEIGHT * 2);
+
+            // Делаем hud невидимым
+            crosshair.setVisibility(false);
+            tankInfo.setVisibility(false);
+            
+        }
+
+        if (event.type == Event::MouseButtonReleased &&
+            event.key.code == Mouse::Right) {
+            view.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+            crosshair.setVisibility(true);
+            tankInfo.setVisibility(true);
+        }
     }
 
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
@@ -72,12 +90,13 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
 
         MenuPause pauseMenu;
         switch (pauseMenu.run(window)) {
-            case 1:
+            case SCR_CONTINUE:
+                music.pause();
                 break;
-            case 0:
+            case SCR_MAIN_MENU:
                 return 0;
                 break;
-            case -1:
+            case SCR_EXIT:
                 return -1;
                 break;
         }
@@ -100,22 +119,13 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
     }
 
     if (Mouse::isButtonPressed(Mouse::Left)) {
-        player.fire(bullets, texDynamicObjects);
+        player.fire(anims, bullets, texDynamicObjects);
     }
-
-    if (event.type == Event::MouseButtonPressed &&
-        event.key.code == Mouse::Right) {
-
-        window.setFramerateLimit(75);
-        window.setVerticalSyncEnabled(true);
-        window.create(VideoMode::getDesktopMode(), "Tank Wars");
-    }
-
 
     // Зум. Работает косячно.
+#ifdef false 
     if (event.type == Event::MouseWheelMoved) {
         Vector2f backupView = view.getSize();
-        std::cout << backupView.x << "  " << backupView.y << std::endl;
         FloatRect newView;
         newView.left = 0;
         newView.top = 0;
@@ -136,6 +146,7 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
         }
         event.mouseWheel.delta = 0;
     }
+#endif
     
     double time;
     if (isStopped == false) {
@@ -240,9 +251,6 @@ int Game::run(Event &event, Clock &clock, Texture &texDynamicObjects,
         (*it_change)->change(window, player, time);
         (*it_change)->draw(window);
     }
-
-   // std::cout << timeBeforeRepairing << "   " << time << "  " << repairPoints.size() << std::endl;  
-   
 
     player.draw(window);
     for (std::list<Enemy*>::iterator it_enemies = enemies.begin();

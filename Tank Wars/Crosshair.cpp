@@ -11,6 +11,8 @@ GameObject(pos, tex, rect)
 
     tankInfo.setFont(font);
     tankInfo.setCharacterSize(20);
+
+    isVisible = true;
 }
 
 
@@ -56,7 +58,13 @@ void Crosshair::update(Vector2f pos, std::list<Enemy*> &enemies, Player &player)
 
 void Crosshair::draw(RenderWindow &window)
 {
-    GameObject::draw(window);
-    window.draw(timeBeforeShoot);
-    window.draw(tankInfo);
+    if (isVisible) {
+        GameObject::draw(window);
+        window.draw(timeBeforeShoot);
+        window.draw(tankInfo);
+    }
+}
+
+void Crosshair::setVisibility(bool visibility) {
+    isVisible = visibility;
 }

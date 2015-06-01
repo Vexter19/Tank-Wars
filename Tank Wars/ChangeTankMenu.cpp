@@ -2,14 +2,14 @@
 
 
 ChangeTankMenu::ChangeTankMenu(int nation, Player &player, Texture &texGUI) :
-GameObject(player.getPos(), texGUI, IntRect(0, 0, 160, 100))
+GameObject(player.getPos(), texGUI, IntRect(74, 54, 211, 200))
 {
     position = player.getPos();
 
     const Vector2f texSize = Vector2f(160, 100);
-    const Vector2f arrowSize = Vector2f(15, 100);
+    const Vector2f arrowSize = Vector2f(27, 100);
 
-    if (nation == GERMANY) {
+    if (nation == USSR) {
         texture.loadFromFile("images\\tiles\\ussr.png");
         texTank1.loadFromFile("images\\tiles\\T-46.png");
         texTank2.loadFromFile("images\\tiles\\T-34.png");
@@ -39,26 +39,61 @@ GameObject(player.getPos(), texGUI, IntRect(0, 0, 160, 100))
     }
 
     arrowNext.setTexture(texGUI);
-    arrowNext.setTextureRect(IntRect(10, 40, 15, 100));
+    arrowNext.setTextureRect(IntRect(10, 40, arrowSize.x, arrowSize.y));
     arrowPrev.setTexture(texGUI);
-    arrowPrev.setTextureRect(IntRect(25, 40, -15, 100));
+    arrowPrev.setTextureRect(IntRect(10 + arrowSize.x, 40, -arrowSize.x, arrowSize.y));
 
     playerLevel = player.getLevel();
 
-    sprite.setTexture(texture);
-    sprite.setOrigin(80, 50);
+    flag.setTexture(texture);
+    flag.setOrigin(80, 50);
     tank.setOrigin(80, 50);
-    arrowNext.setOrigin(7.5, 50);
-    arrowPrev.setOrigin(7.5, 50);
+    arrowNext.setOrigin(14, 50);
+    arrowPrev.setOrigin(14, 50);
 
 
-    sprite.setPosition(position);
+    flag.setPosition(position);
     tank.setPosition(position);
-    arrowPrev.setPosition(position.x - texSize.x / 2, position.y);
-    arrowNext.setPosition(position.x + texSize.x / 2, position.y);
+    arrowPrev.setPosition(position.x - texSize.x / 2 - arrowSize.x / 2 + 3, position.y - 1);
+    arrowNext.setPosition(position.x + texSize.x / 2 + arrowSize.x / 2 - 3, position.y - 1);
 
     mouse = new MouseCursor(Vector2f(0, 0), texGUI, IntRect(30, 0, 20, 20));
     mousePoint.setTextureRect(IntRect(0, 0, 1, 1));
+
+    sprite.setPosition(position.x, position.y + texSize.y / 2 - 4);
+
+    font.loadFromFile(MAIN_FONT);
+    level.setPosition(position.x - texSize.x / 2 + 10,
+        position.y - texSize.y / 2 + 10);
+    name.setPosition(position.x + texSize.x / 2 - 50,
+        position.y + texSize.y / 2 - 25);
+    hp.setPosition(position.x - texSize.x / 2 - 10,
+        position.y + texSize.y / 2 + 10);
+    damage.setPosition(position.x - texSize.x / 2 - 10,
+        position.y + texSize.y / 2 + 30);
+    recharging.setPosition(position.x - texSize.x / 2 - 10,
+        position.y + texSize.y / 2 + 50);
+    speed.setPosition(position.x - texSize.x / 2 - 10,
+        position.y + texSize.y / 2 + 70);
+
+    level.setFont(font);
+    name.setFont(font);
+    hp.setFont(font);
+    damage.setFont(font);
+    speed.setFont(font);
+    recharging.setFont(font);
+
+    level.setCharacterSize(16);
+    name.setCharacterSize(16);
+    hp.setCharacterSize(16);
+    damage.setCharacterSize(16);
+    speed.setCharacterSize(16);
+    recharging.setCharacterSize(16);
+
+    damageHead = L"Максимальный урон: ";
+    hpHead = L"Очки прочности: ";
+    speedHead = L"Макс. скорость: ";
+    rechargingHead = L"Время перезарядки: ";
 }
 
 
@@ -84,17 +119,9 @@ bool ChangeTankMenu::run(Texture &texGUI, RenderWindow &window, Player &player)
     while (true) {
         lifeOfPoint = true;
 
-        mousePos = getMouseCoords(Mouse::getPosition(window), window.getSize());
-        (*mouse).update((Vector2f)mousePos);
-        mousePoint.setPosition((Vector2f)mousePos);
-
         while (window.pollEvent(event)) {
             // Если нажата стрелка влево
-            if ((mousePoint.getGlobalBounds().intersects(
-                arrowPrev.getGlobalBounds()) &&
-                event.type == Event::MouseButtonPressed &&
-                event.key.code == Mouse::Left) ||
-                (event.type == Event::KeyPressed &&
+            if ((event.type == Event::KeyPressed &&
                 event.key.code == Keyboard::A)) {
 
                 if (*thisTank != tanks.front()) {
@@ -105,11 +132,7 @@ bool ChangeTankMenu::run(Texture &texGUI, RenderWindow &window, Player &player)
             }
 
             // Если нажата стрелка вправо
-            if ((mousePoint.getGlobalBounds().intersects(
-                arrowNext.getGlobalBounds()) &&
-                event.type == Event::MouseButtonPressed &&
-                event.key.code == Mouse::Left) ||
-                (event.type == Event::KeyPressed &&
+            if ((event.type == Event::KeyPressed &&
                 event.key.code == Keyboard::D)) {
 
                 if (*thisTank != tanks.back()) {
@@ -120,13 +143,7 @@ bool ChangeTankMenu::run(Texture &texGUI, RenderWindow &window, Player &player)
             }
 
             // Если выбран танк и нажата ЛКМ, то создаём нового игрока
-            if ((mousePoint.getGlobalBounds().intersects(
-                sprite.getGlobalBounds()) &&
-                event.type == Event::MouseButtonPressed &&
-                event.key.code == Mouse::Left) ||
-                (event.type == Event::KeyPressed &&
-                event.key.code == Keyboard::Return)) {
-
+            if (event.key.code == Keyboard::Return) {
                 Vector2f playerPos = player.getPos();
 
                 Player *tempPlayer = new Player(playerPos,
@@ -135,6 +152,18 @@ bool ChangeTankMenu::run(Texture &texGUI, RenderWindow &window, Player &player)
 
                 lifeOfPoint = false;
                 return lifeOfPoint;
+            }
+
+            level.setString(numToStr((*thisTank)->level));
+            name.setString((*thisTank)->characteristic.name);
+            hp.setString(hpHead + numToStr((*thisTank)->characteristic.health));
+            damage.setString(damageHead + numToStr((*thisTank)->characteristic.damage));
+            recharging.setString(rechargingHead + numToStr((*thisTank)->characteristic.rechargeTime) + L" с");
+            speed.setString(speedHead + numToStr((*thisTank)->characteristic.maxSpeed) + L" км/ч");
+
+
+            if (event.type == Event::Closed) {
+                return false;
             }
         }
 
@@ -145,11 +174,18 @@ bool ChangeTankMenu::run(Texture &texGUI, RenderWindow &window, Player &player)
 
 void ChangeTankMenu::draw(RenderWindow &window)
 {
-    window.clear();
+    //window.clear();
     GameObject::draw(window);
+    window.draw(flag);
     window.draw(tank);
     window.draw(arrowPrev);
     window.draw(arrowNext);
+    window.draw(level);
+    window.draw(name);
+    window.draw(hp);
+    window.draw(damage);
+    window.draw(recharging);
+    window.draw(speed);
     (*mouse).draw(window);
     window.display();
 }

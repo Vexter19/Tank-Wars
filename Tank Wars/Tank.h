@@ -22,6 +22,7 @@ class Tank :
 {
 private:
     int prevDir;
+    Vector2f backupPos;
 protected:
     //Tank
     Texture texTurrel;
@@ -57,7 +58,8 @@ public:
         std::list<Animation*> &anims);
 
     void draw(RenderWindow &window);
-    void fire(std::list<Bullet*> &bullets, Texture &texBullet);
+    void fire(std::list<Animation*> &anims, 
+        std::list<Bullet*> &bullets, Texture &texBullet);
     void getDamage(int damage);
 
     std::wstring getTankName();

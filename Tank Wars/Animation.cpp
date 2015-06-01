@@ -7,7 +7,7 @@ void Animation::update(double time)
         IntRect currentRect = sprite.getTextureRect();
         sprite.setTextureRect(IntRect(firstRect.left + currentRect.width * (int)currentFrame,
             currentRect.top, currentRect.width, currentRect.height)); 
-        currentFrame += currentFrame * time / 100;        
+        currentFrame += currentFrame * time / 150;        
     }    
 }
 

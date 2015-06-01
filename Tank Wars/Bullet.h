@@ -19,7 +19,8 @@ private:
     int damage;
     Texture *texture;
 public:
-    Bullet(Vector2f pos, float angle, Texture *tex, IntRect rect, int damage);
+    Bullet(std::list<Animation*> &anims, Vector2f pos, float angle,
+        Texture *tex, IntRect rect, int damage);
     void update(double time, View &view, RenderWindow &window,
         std::list<GameObject*> &objects, std::list<Animation*> &anims);
     bool isAlive();

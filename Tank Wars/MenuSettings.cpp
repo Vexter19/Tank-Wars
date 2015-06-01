@@ -44,6 +44,11 @@ int MenuSettings::run(RenderWindow &window)
 
     int choise = MENU_NULL;
 
+    Vector2f menuPos;
+    menuPos.x = view.getCenter().x - view.getSize().x / 2;
+    menuPos.y = view.getCenter().y - view.getSize().y / 2;
+    background.setPosition(menuPos);
+
     while (true) {
         while (window.pollEvent(event)) {
             if (event.type == Event::Closed) {
@@ -70,6 +75,8 @@ int MenuSettings::run(RenderWindow &window)
         choise = MENU_NULL;
         for (std::vector<Setting>::iterator it = settings.begin();
             it != settings.end(); it++) {
+
+            (*it).text.setPosition((*it).pos.x + menuPos.x, (*it).pos.y + menuPos.y);
 
             if (((*it).id >= 1) && ((*it).id <= 4)) {
                 (*it).text.setString((*it).name + L"  " + getNameOfValue(it));
@@ -158,7 +165,7 @@ void  MenuSettings::saveSettings(RenderWindow &window)
         window.setVerticalSyncEnabled(false);
     }
     window.setMouseCursorVisible(false);
-    window.setFramerateLimit(60);
+    //window.setFramerateLimit(60);
 
     std::ofstream fout("data\\settings.dat", std::ios::out);
     fout << isSoundOn << " " << graphicsSettings  << " " <<
